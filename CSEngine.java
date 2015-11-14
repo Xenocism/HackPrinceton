@@ -116,10 +116,11 @@ public class CSEngine {
                 actor.setVY((Double) extras.next());
                 actor.setAX((Double) extras.next());
                 actor.setAY((Double) extras.next());
-            }      break;
-            case Packet.CREATE:        break;
-            case Packet.KILL:          break;
-            case Packet.PORT:         break;
+            } break;
+
+            case Packet.CREATE:         break;
+            case Packet.KILL:           break;
+            case Packet.PORT:           break;
             default:    break; 
         }
     }
