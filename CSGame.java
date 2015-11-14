@@ -7,12 +7,12 @@ public class CSGame {
         GameScreen game = new GameScreen();
 
         game.setEngine(engine);
-        //engine.setCSEngine(mail);
         engine.setGameScreen(game);
-        //mail.setEngine(engine);
+        //mail.setCSEngine(engine);
 
         game.init();
         engine.init();
+        //mailroom.run();
 
         while (true) {
             engine.run();
