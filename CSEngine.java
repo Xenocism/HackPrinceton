@@ -1,6 +1,7 @@
 
 import java.util.TreeMap;
 import java.util.LinkedList;
+import java.util.concurrent.ConcurrentLinkedQueue;
 
 public class CSEngine {
     private static final int UP     = 0;
@@ -17,9 +18,9 @@ public class CSEngine {
     private RedBlackBST<Integer, Actor> actorTree;
     private LinkedList<Actor> actors;
 
-    private LinkedList<Object> extras;
+    private ConcurrentLinkedQueue<Packet> inbox;
+    private ConcurrentLinkedQueue<Packet> outbox;
 
-    private CSMailroom mailroom;
     private GameScreen screen;
     
     private int currID;
@@ -29,6 +30,8 @@ public class CSEngine {
     public CSEngine() {
         this.actors     = new LinkedList<Actor>();
         this.actorTree  = new RedBlackBST<Integer, Actor>();
+        this.inbox      = new ConcurrentLinkedQueue<Packet>();
+        this.outbox     = new ConcurrentLinkedQueue<Packet>();
         this.currID     = 0;
     }
 
@@ -36,17 +39,14 @@ public class CSEngine {
         this.screen = screen;
     }
 
-    public void setCSMailroom(CSMailroom mailroom) {
-        this.mailroom = mailroom;
-    }
-
     // called after mailroom and gamescreen are set, returns true
     // if all checks out, false if not
     public boolean init() {
         if (screen == null)     return false;
-        if (mailroom == null)   return false;
         if (actors == null)     return false;
         if (actorTree == null)  return false;
+        if (inbox == null)      return false;
+        if (outbox == null)     return false;
         // ping server
         return true;
     }
@@ -54,7 +54,7 @@ public class CSEngine {
     //********************  Event and mail control
 
     // handle general event given an actor and an id
-    public void event(Actor a, int id) {
+    public void sendEvent(Actor a, int id) {
         if (a == null) throw new java.lang.IllegalArgumentException("Null Actor to Event (move)");
         // switch(id) {
         //     case UP:    break;
@@ -67,7 +67,7 @@ public class CSEngine {
     }
 
     // handle mouse click event given an actor
-    public void event(Actor a, int id, double x, double y) {
+    public void sendEvent(Actor a, int id, double x, double y) {
         if (a == null) throw new java.lang.IllegalArgumentException("Null Actor to Event (mouse)");
         switch(id) {
             case UP: break;
@@ -75,18 +75,6 @@ public class CSEngine {
             case DOWN: break;
             case RIGHT: break;
             default: break;
-        }
-    }
-
-    // given information, sends mail to mailroom
-    public void sendMail(Actor a, int id) {
-        if (a == null) throw new java.lang.NullPointerException();
-        switch(id) {
-            case UP:    break;
-            case LEFT:  break;
-            case DOWN:  break;
-            case RIGHT: break;
-            default:    break;
         }
     }
 
@@ -102,11 +90,14 @@ public class CSEngine {
         }
     }
 
-    // returns all active actors this engine controls
-    public Iterable<Actor> getActors() {
-        return actors;
-    }   
+    public ConcurrentLinkedQueue<Packet> getInbox() {
+        return inbox;
+    }
 
+    public ConcurrentLinkedQueue<Packet> getOutbox() {
+        return outbox;
+    }
+      
     //******************************** simple update call
 
     // simple update call to all actors
@@ -115,6 +106,11 @@ public class CSEngine {
             a.setVX(a.getVX() * FRICTION);
             a.setVY(a.getVY() * FRICTION);
             a.update();
+        }
+        if (!inbox.isEmpty()) {
+            // handle incoming mail
+            Packet toHandle = inbox.poll();
+            // do stuff with the packet
         }
     }
 
@@ -153,6 +149,11 @@ public class CSEngine {
     }
 
     //************************** Actor give/kill calls
+
+    // returns all active actors this engine controls
+    public Iterable<Actor> getActors() {
+        return actors;
+    } 
 
     public void giveActor(Actor a, int id) {
         if (a == null) throw new java.lang.IllegalArgumentException("Null Actor to giveActor");
