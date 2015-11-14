@@ -13,8 +13,7 @@ public class CSEngine {
     private static final int[] xBounds  = new int[]{0, 1000};
     private static final int[] yBounds  = new int[]{0, 500};
 
-    private static final int impulse = 5;
-    private static final double FRICTION = 0.995;
+    private static final int IMPULSE = 5;
 
     private RedBlackBST<Integer, Actor> actorTree;
     private LinkedList<Actor> actors;
@@ -54,26 +53,49 @@ public class CSEngine {
     // handle general event given an actor and an id
     public void makePackage(Actor a, int eid) {
         if (a == null) throw new java.lang.IllegalArgumentException("Null Actor to Event (move)");
-        int id = a.getID();
+        int aid = a.getID();
+        Packet toSend;
         switch(eid) {
-            case UP:    break;
-            case LEFT:  break;
-            case DOWN:  break;
-            case RIGHT: break;
+            case UP: {
+                toSend = new Packet(Packet.MOVE, aid);
+                LinkedList<Double> extras = new LinkedList<Double>();
+                extras.add(a.getVX());
+                extras.add(a.getVY() + IMPULSE);
+            }   break;
+            case LEFT: {
+                toSend = new Packet(Packet.MOVE, aid);
+                LinkedList<Double> extras = new LinkedList<Double>();
+                extras.add(a.getVX() - IMPULSE);
+                extras.add(a.getVY());
+            } break;
+            case DOWN: {
+                toSend = new Packet(Packet.MOVE, aid);
+                LinkedList<Double> extras = new LinkedList<Double>();
+                extras.add(a.getVX());
+                extras.add(a.getVY() - IMPULSE);
+            } break;
+            case RIGHT: {
+                toSend = new Packet(Packet.MOVE, aid);
+                LinkedList<Double> extras = new LinkedList<Double>();
+                extras.add(a.getVX() + IMPULSE);
+                extras.add(a.getVY());
+            } break;
             default:    break;
         }
+        if (toSend != null)
+            outbox.add(toSend);
     }
 
     // handle mouse click event given an actor
     public void makePackage(Actor a, int eid, double x, double y) {
         if (a == null) throw new java.lang.IllegalArgumentException("Null Actor to Event (mouse)");
-        switch(eid) {
-            case UP: break;
-            case LEFT: break;
-            case DOWN: break;
-            case RIGHT: break;
-            default: break;
-        }
+        int aid = a.getID();
+        Packet toSend = new Packet(Packet.PORT, aid);
+        LinkedList<Double> extras = new LinkedList<Double>();
+        extras.add(x);
+        extras.add(y);
+        if (toSend != null)
+            outbox.add(toSend);
     }
 
     public ConcurrentLinkedQueue<Packet> getInbox() {
@@ -104,10 +126,10 @@ public class CSEngine {
 
             case Packet.CREATE: {
                 giveActor(actor, actorId);
-            }        break;
+            } break;
             case Packet.KILL:  {
                 killActor(actorId);
-            }         break;
+            } break;
             default:    break; 
         }
     }
@@ -119,7 +141,6 @@ public class CSEngine {
         if (!inbox.isEmpty()) {
             // handle incoming mail
             unpackage();
-            // do stuff with the packet
         }
     }
 
