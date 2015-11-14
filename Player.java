@@ -1,12 +1,11 @@
 public class Player extends Actor {
     
-    public Player(double x, double y, String imgName) {
-        super(x, y, imgName);
+    public Player(int id, double x, double y, String imgName) {
+        super(id, x, y, imgName);
     }
 
-    public Player() {
-        super();
+    public Player(int id) {
+        super(id);
     }
 
-    
 }
