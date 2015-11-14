@@ -127,11 +127,6 @@ public class CSEngine {
 
     // simple update call to all actors
     public void run() {
-        for (Actor a : actors) {
-            a.setVX(a.getVX() * FRICTION);
-            a.setVY(a.getVY() * FRICTION);
-            a.update();
-        }
         if (!inbox.isEmpty()) {
             // handle incoming mail
             unpackage();
