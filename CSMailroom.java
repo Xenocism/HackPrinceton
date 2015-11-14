@@ -2,7 +2,7 @@ import java.net.*;
 import java.io.*;
 import java.util.*;
 
-public class CSMailroom {
+public class CSMailroom extends Mailroom{
     private Socket socket;
     private PrintWriter out;
     private Scanner in;
@@ -34,9 +34,10 @@ public class CSMailroom {
         }
     }
 
-    public void transmit() {
-     String line = "test";
-     out.println("test");
+    public void sendPacket(Packet packet) {
+        out.print(Packet.START);
+        out.print(packet.getActionID());
+        out.flush();
     }
 
     public void receive() {
