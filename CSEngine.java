@@ -45,6 +45,15 @@ public class CSEngine {
         if (inbox == null)      return false;
         if (outbox == null)     return false;
         // ping server
+        Packet create = new Packet(Packet.CREATE, -1);
+        LinkedList<Double> extras = new LinkedList<Double>();
+        extras.add(500.0);
+        extras.add(200.0);
+        extras.add(0.0);
+        extras.add(0.0);
+        extras.add(0.0);
+        extras.add(0.0);
+        outbox.add(create);
         return true;
     }
 
@@ -54,7 +63,7 @@ public class CSEngine {
     public void makePackage(Actor a, int eid) {
         if (a == null) throw new java.lang.IllegalArgumentException("Null Actor to Event (move)");
         int aid = a.getID();
-        Packet toSend;
+        Packet toSend = null;
         switch(eid) {
             case UP: {
                 toSend = new Packet(Packet.MOVE, aid);
@@ -98,6 +107,23 @@ public class CSEngine {
             outbox.add(toSend);
     }
 
+    // makepackage for creating an actor
+    public void makePackage(int actorType, double x, double y, double vx, 
+                            double vy, double ax, double ay) {
+        Packet toSend = new Packet(Packet.CREATE, -1);
+        LinkedList<Double> extras = new LinkedList<Double>();
+        Double typeConv = new Double(actorType);
+        extras.add(typeConv);
+        extras.add(x);
+        extras.add(y);
+        extras.add(vx);
+        extras.add(vy);
+        extras.add(ax);
+        extras.add(ay);
+        toSend.setExtras(extras);
+        outbox.add(toSend);
+    }
+
     public ConcurrentLinkedQueue<Packet> getInbox() {
         return inbox;
     }
@@ -125,6 +151,14 @@ public class CSEngine {
             } break;
 
             case Packet.CREATE: {
+                Player toAdd = new Player(actorId);
+                int type = (int) extras.next();
+                toAdd.setX((Double) extras.next());
+                toAdd.setY((Double)extras.next());
+                toAdd.setVX((Double)extras.next());
+                toAdd.setVY((Double)extras.next());
+                toAdd.setAX((Double)extras.next());
+                toAdd.setAY((Double)extras.next());
                 giveActor(actor, actorId);
             } break;
             case Packet.KILL:  {

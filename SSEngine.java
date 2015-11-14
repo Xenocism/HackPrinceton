@@ -10,6 +10,8 @@ public class SSEngine {
     private static final int DOWN   = 2;
     private static final int RIGHT  = 3;
 
+    private static final String[] images = {"images\\fill.png"}
+
     private static final int[] xBounds  = new int[]{0, 1000};
     private static final int[] yBounds  = new int[]{0, 500};
 
@@ -65,8 +67,26 @@ public class SSEngine {
         extras.add(actortree.get(id).getVY());
         extras.add(actortree.get(id).getAX());
         extras.add(actortree.get(id).getAY());
-        outbox.add(new Packet(5, id, extras));
+        Packet toReturn = new Packet(5, id);
+        toReturn.setExtras(extras);
+        outbox.add(toReturn);
     }
+
+    public void createpackage(int id) {
+        if (actortree.get(id) == null) return;
+
+        LinkedList<Double> extras = new LinkedList<Double>();
+
+        extras.add(actortree.get(id).getX());
+        extras.add(actortree.get(id).getY());
+        extras.add(actortree.get(id).getVX());
+        extras.add(actortree.get(id).getVY());
+        extras.add(actortree.get(id).getAX());
+        extras.add(actortree.get(id).getAY());
+        Packet toReturn = new Packet(2, id);
+        toReturn.setExtras(extras);
+        outbox.add(toReturn);
+        }
 
      private void unpackage() {
         Packet present  = inbox.poll();
@@ -81,8 +101,9 @@ public class SSEngine {
             } break;
 
             case Packet.CREATE: {
-                giveActor(actor);
-            }        break;
+                int index = (int) extras.next();
+                giveActor(index, extras.next(), extras.next(), extras.next(), extras.next(), extras.next(), extras.next(), images[index]);
+            } break;
             case Packet.KILL: {
                 killActor(actorId);
             } break;
@@ -94,17 +115,27 @@ public class SSEngine {
                 actor.setAX(0.0);
                 actor.setAY(0.0;
             }
-            default:    break; 
+            default: break; 
         }
     }
 
     //********************************* Create / Delete Actors
 
-    public void giveActor(Actor a) {
-        if (a == null) throw new java.lang.IllegalArgumentException("Null Actor to giveActor");
+    public void giveActor(int type, double x, double y, double vx, double vy, double ax, double ay, String pic) {
+        switch (type) {
+            case 1: {
+                Player a = new Player((idcount + 1), x, y, pic);
+                a.setVX(vx);
+                a.setVY(vy);
+                a.setAX(ax);
+                a.setAY(ay);
+            } break;
+            default: break
+        }
         actorTree.put(new Integer((idcount + 1), a);
-        actors.push(a);
+        createpackage(idcount + 1);
         idcount++;
+
     }
 
     public void killActor(int id) {
