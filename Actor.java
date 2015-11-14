@@ -1,4 +1,7 @@
+/*
+    Basic actor file, has position, velocity, accel data and image name
 
+*/
 public class Actor {
 
     /*****************************   Variables   ***********************************/
