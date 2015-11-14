@@ -13,6 +13,7 @@ public class CSEngine {
     private static final int[] yBounds  = new int[]{0, 500};
 
     private static final int impulse = 5;
+    private static final double FRICTION = 0.995;
 
     private RedBlackBST<Integer, Actor> actorTree;
     private LinkedList<Actor> actors;
@@ -60,7 +61,6 @@ public class CSEngine {
             case RIGHT: break;
             default:    break;
         }
-        package(a, id);
     }
 
     // handle mouse click event given an actor
@@ -97,7 +97,7 @@ public class CSEngine {
 
     //****************************** Package handling
 
-    private void package() {
+    private void package(Actor a, int id) {
         //Packet packet = new Packet();
     }
 
@@ -105,8 +105,7 @@ public class CSEngine {
         Packet present = inbox.poll();
         int actionId = getActionID();
         int actorId = getActorID();
-        Actor actor = actorTree.get(actorID);
-
+        Actor actor = actorTree.get(actorId);
         Iterable<Object> extras = present.getExtras();
         switch(actionId) {
             case packet.UPDATE:    {
@@ -116,13 +115,10 @@ public class CSEngine {
                 actor.setVY((Double) extras.next());
                 actor.setAX((Double) extras.next());
                 actor.setAY((Double) extras.next());
-            } break;
-
-            case packet.CREATE:    {
-                Player player = new Player()
-            }    break;
-            case packet.KILL:      moveDown(a);    break;
-            case packet.PORT:      moveRight(a);   break;
+            }      break;
+            case CREATE:    moveLeft(a);    break;
+            case KILL:      moveDown(a);    break;
+            case PORT:      moveRight(a);   break;
             default:    break; 
         }
     }
@@ -131,6 +127,11 @@ public class CSEngine {
 
     // simple update call to all actors
     public void run() {
+        for (Actor a : actors) {
+            a.setVX(a.getVX() * FRICTION);
+            a.setVY(a.getVY() * FRICTION);
+            a.update();
+        }
         if (!inbox.isEmpty()) {
             // handle incoming mail
             unpackage();
