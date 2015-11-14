@@ -1,5 +1,5 @@
 public class SSGame {
-    public static main(String[] args) {
+    public static void main(String[] args) {
 
         SSEngine engine = new SSEngine();
         SSMailroom mail = new SSMailroom(engine);
