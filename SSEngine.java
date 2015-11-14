@@ -24,6 +24,8 @@ public class SSEngine {
     private ConcurrentLinkedQueue<Packet> inbox;
     private ConcurrentLinkedQueue<Packet> outbox;
 
+    private ConcurrentLinkedQueue test;
+
     // Constructor, init and setters
 
     public SSEngine() {
@@ -39,6 +41,10 @@ public class SSEngine {
         if (inbox == null)      return false;
         if (outbox == null)     return false;
         return true;
+    }
+
+    public void setCSEngine(CSEngine e) {
+        this.test = e.getInbox();
     }
 
     //********************************* Return in and Outbox
@@ -67,6 +73,7 @@ public class SSEngine {
         Packet toReturn = new Packet('5', id);
         toReturn.setExtras(extras);
         outbox.add(toReturn);
+        test.add(toReturn);
     }
 
     public void createpackage(int id) {
@@ -84,6 +91,7 @@ public class SSEngine {
         Packet toReturn = new Packet('2', id);
         toReturn.setExtras(extras);
         outbox.add(toReturn);
+        test.add(toReturn);
         }
 
      private void unpackage() {
