@@ -62,7 +62,7 @@ public class GameScreen {
         if (StdDraw.mousePressed()) {
             mouseX = StdDraw.mouseX();
             mouseY = StdDraw.mouseY();
-            engine.sendevent(player, 4, mouseX, mouseY);
+            engine.sendEvent(player, 4, mouseX, mouseY);
         }
         StdDraw.show(10);
     }
