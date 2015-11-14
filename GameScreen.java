@@ -19,16 +19,12 @@ public class GameScreen {
     }
 
     public void init() {
-
-        player = new Player(1, 20.0, 20.0, "images\\fill.png");
-
+        
         StdDraw.setCanvasSize(1000,500);
         StdDraw.setXscale(0, 1000);
         StdDraw.setYscale(0, 500);
 
         StdDraw.rectangle(500.0, 250.0, 500.0, 250.0);
-
-        engine.giveActor(1, player, 0);
     }
 
     public void run() {
