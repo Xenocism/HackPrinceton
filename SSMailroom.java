@@ -40,11 +40,22 @@ public class SSMailroom {
     public void listenSocket() {
         String line;
         while (true) {
-            if (in.hasNext()) {
-                line = in.next();
-                System.out.println("Text received :" + line + " " + 1);
-            //Send data back to client
-                out.println(line);
+            if(in.hasNext()) {
+                char actionID = in.next().charAt(0);
+                int actorID = in.nextInt();
+                double extra1 = in.nextDouble();
+                double extra2 = in.nextDouble();
+
+                System.out.println(actionID + 1);
+                System.out.println("" + actorID + 1);
+                System.out.println("" + extra1 + 1);
+                System.out.println("" + extra2 + 1);
+
+                out.print(actionID);
+                out.print(actorID);
+                out.print(extra1);
+                out.print(extra2);
+                out.flush();
             }
         }
     }
