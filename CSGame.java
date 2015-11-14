@@ -2,17 +2,17 @@ public class CSGame {
 
     public static void main(String[] args) {
 
-        CSMailroom mail = new CSMailroom();
         CSEngine engine = new CSEngine();
+        CSMailroom mail = new CSMailroom(engine);
         GameScreen game = new GameScreen();
+        CSMailroomRunner run = new CSMailroomRunner();
 
         game.setEngine(engine);
         engine.setGameScreen(game);
-        //mail.setCSEngine(engine);
 
         game.init();
         engine.init();
-        //mailroom.run();
+        //run.start();
 
         while (true) {
             engine.run();
