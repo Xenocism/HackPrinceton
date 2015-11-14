@@ -53,6 +53,7 @@ public class CSEngine {
         extras.add(0.0);
         extras.add(0.0);
         extras.add(0.0);
+        outbox.add(create);
         return true;
     }
 
@@ -151,6 +152,7 @@ public class CSEngine {
 
             case Packet.CREATE: {
                 Player toAdd = new Player(actorId);
+                int type = (int) extras.next();
                 toAdd.setX((Double) extras.next());
                 toAdd.setY((Double)extras.next());
                 toAdd.setVX((Double)extras.next());
