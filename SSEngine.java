@@ -10,7 +10,7 @@ public class SSEngine {
     private static final int DOWN   = 2;
     private static final int RIGHT  = 3;
 
-    private static final String[] images = {"images\\fill.png"}
+    private static final String[] images = {"images\\fill.png"};
 
     private static final int[] xBounds  = new int[]{0, 1000};
     private static final int[] yBounds  = new int[]{0, 500};
@@ -25,7 +25,7 @@ public class SSEngine {
 
     // Constructor, init and setters
 
-    public CSEngine() {
+    public SSEngine() {
         this.actors     = new LinkedList<Actor>();
         this.actorTree  = new RedBlackBST<Integer, Actor>();
         this.inbox      = new ConcurrentLinkedQueue<Packet>();
@@ -40,7 +40,6 @@ public class SSEngine {
         if (actorTree == null)  return false;
         if (inbox == null)      return false;
         if (outbox == null)     return false;
-        // ping server
         return true;
     }
 
@@ -73,6 +72,7 @@ public class SSEngine {
     }
 
     public void createpackage(int id) {
+
         if (actortree.get(id) == null) return;
 
         LinkedList<Double> extras = new LinkedList<Double>();
@@ -108,12 +108,12 @@ public class SSEngine {
                 killActor(actorId);
             } break;
             case Packet.PORT: {
-                actor.setX((extras.next());
+                actor.setX(extras.next());
                 actor.setY(extras.next());
                 actor.setVX(0.0);
-                actor.setVY(0.0;
+                actor.setVY(0.0);
                 actor.setAX(0.0);
-                actor.setAY(0.0;
+                actor.setAY(0.0);
             }
             default: break; 
         }
@@ -130,9 +130,9 @@ public class SSEngine {
                 a.setAX(ax);
                 a.setAY(ay);
             } break;
-            default: break
+            default: break;
         }
-        actorTree.put(new Integer((idcount + 1), a);
+        actorTree.put((idcount + 1), a);
         createpackage(idcount + 1);
         idcount++;
 
@@ -151,7 +151,7 @@ public class SSEngine {
             // handle incoming mail
             unpackage();
         }
-        for (int i = 0, i < idcount; i++) {
+        for (int i = 0; i < idcount; i++) {
             update(i);
         }
     }
