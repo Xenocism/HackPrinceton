@@ -12,6 +12,7 @@ public class CSEngine {
     private static final int[] yBounds  = new int[]{0, 500};
 
     private static final int impulse = 5;
+    private static final double FRICTION = 0.998;
 
     private RedBlackBST<Integer, Actor> actorTree;
     private Stack<Actor> actors;
@@ -88,8 +89,8 @@ public class CSEngine {
         switch(id) {
             case UP:    moveUp(a);      break;
             case LEFT:  moveLeft(a);    break;
-            case DOWN:  moveDown(a);   break;
-            case RIGHT: moveRight(a);    break;
+            case DOWN:  moveDown(a);    break;
+            case RIGHT: moveRight(a);   break;
             default:    break; 
         }
     }
@@ -104,6 +105,8 @@ public class CSEngine {
     // simple update call to all actors
     public void run() {
         for (Actor a : actors) {
+            a.setVX(a.getVX() * FRICTION);
+            a.setVY(a.getVY() * FRICTION);
             a.update();
         }
     }

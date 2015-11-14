@@ -14,6 +14,7 @@ public class Actor {
     private double ay; // current y acceleration of this Actor
 
     private double maxV; // maximum velocity of this actor
+    private double minV = 1;
 
     private String imgName; // image associated with this actor
 
@@ -48,11 +49,15 @@ public class Actor {
     // set x velocity of this Actor
     public void setVX(double vx) {
         this.vx = vx;
+        if (Math.abs(vx) < minV)
+            vx = 0;
     }
 
     // set y velocity of this Actor
     public void setVY(double vy) {
         this.vy = vy;
+        if (Math.abs(vy) < minV)
+            vy = 0;
     }
 
     // set x accel of this Actor

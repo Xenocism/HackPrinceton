@@ -4,6 +4,6 @@
 #y
 #imgname
 player
-0
-0
+20.0
+20.0
 images\\fill.png
