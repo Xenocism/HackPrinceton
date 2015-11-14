@@ -13,7 +13,6 @@ public class CSEngine {
     private static final int[] yBounds  = new int[]{0, 500};
 
     private static final int impulse = 5;
-    private static final double FRICTION = 0.995;
 
     private RedBlackBST<Integer, Actor> actorTree;
     private LinkedList<Actor> actors;
@@ -65,7 +64,7 @@ public class CSEngine {
     }
 
     // handle mouse click event given an actor
-    public void sendEvent(Actor a, int id, double x, double y) {
+    public void sendEvent(Actor a, int eid, double x, double y) {
         if (a == null) throw new java.lang.IllegalArgumentException("Null Actor to Event (mouse)");
         switch(id) {
             case UP: break;
@@ -77,7 +76,7 @@ public class CSEngine {
     }
 
     // given mail information, acts accordingly (called from mailroom)
-    public void receiveMail(Actor a, int id) {
+    public void receiveMail(Actor a, int eid) {
         if (a == null) throw new java.lang.IllegalArgumentException("Null Actor to receiveMail");
         switch(id) {
             case UP:    moveUp(a);      break;
@@ -106,8 +105,25 @@ public class CSEngine {
         Packet present = inbox.poll();
         int actionId = getActionID();
         int actorId = getActorID();
+        Actor actor = actorTree.get(actorID);
+
+        Iterable<Object> extras = present.getExtras();
         switch(actionId) {
-            
+            case packet.UPDATE:    {
+                actor.setX((Double) extras.next());
+                actor.setY((Double) extras.next());
+                actor.setVX((Double) extras.next());
+                actor.setVY((Double) extras.next());
+                actor.setAX((Double) extras.next());
+                actor.setAY((Double) extras.next());
+            } break;
+
+            case packet.CREATE:    {
+                Player player = new Player()
+            }    break;
+            case packet.KILL:      moveDown(a);    break;
+            case packet.PORT:      moveRight(a);   break;
+            default:    break; 
         }
     }
       
@@ -115,11 +131,6 @@ public class CSEngine {
 
     // simple update call to all actors
     public void run() {
-        for (Actor a : actors) {
-            a.setVX(a.getVX() * FRICTION);
-            a.setVY(a.getVY() * FRICTION);
-            a.update();
-        }
         if (!inbox.isEmpty()) {
             // handle incoming mail
             unpackage();
