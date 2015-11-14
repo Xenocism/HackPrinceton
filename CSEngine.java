@@ -30,7 +30,6 @@ public class CSEngine {
         this.actorTree  = new RedBlackBST<Integer, Actor>();
         this.inbox      = new ConcurrentLinkedQueue<Packet>();
         this.outbox     = new ConcurrentLinkedQueue<Packet>();
-        this.currID     = 0;
     }
 
     public void setGameScreen(GameScreen screen) {
@@ -99,13 +98,13 @@ public class CSEngine {
 
     //****************************** Package handling
 
-    public Packet package() {
-        Packet packet = new Packet()
-    }
+    // public Packet package() {
+    //     //Packet packet = new Packet();
+    // }
 
-    public Packet unpackage() {
+    // public Packet unpackage() {
 
-    }
+    // }
       
     //******************************** simple update call
 
@@ -176,7 +175,7 @@ public class CSEngine {
         Iterable<Integer> keys = actorTree.keys();
         actors = new LinkedList<Actor>();
         for (int i : keys) {
-            actors.push(actorTree.get(i));
+            actors.add(actorTree.get(i));
         }
         screen.setActors(actors);
     }
