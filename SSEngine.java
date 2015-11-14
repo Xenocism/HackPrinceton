@@ -10,6 +10,8 @@ public class SSEngine {
     private static final int DOWN   = 2;
     private static final int RIGHT  = 3;
 
+    private static final String[] images = {"images\\fill.png"}
+
     private static final int[] xBounds  = new int[]{0, 1000};
     private static final int[] yBounds  = new int[]{0, 500};
 
@@ -68,6 +70,10 @@ public class SSEngine {
         outbox.add(new Packet(5, id, extras));
     }
 
+    public void createpackage() {
+
+    }
+
      private void unpackage() {
         Packet present  = inbox.poll();
         int actionId    = present.getActionID();
@@ -81,8 +87,9 @@ public class SSEngine {
             } break;
 
             case Packet.CREATE: {
-                giveActor(actor);
-            }        break;
+                int index = (int) extras.next();
+                giveActor(index, extras.next(), extras.next(), images[index]);
+            } break;
             case Packet.KILL: {
                 killActor(actorId);
             } break;
@@ -94,7 +101,7 @@ public class SSEngine {
                 actor.setAX(0.0);
                 actor.setAY(0.0;
             }
-            default:    break; 
+            default: break; 
         }
     }
 
