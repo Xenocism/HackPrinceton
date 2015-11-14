@@ -40,9 +40,9 @@ public class SSMailroom {
     public void listenSocket() {
         String line;
         while (true) {
-            if (line.hasNext()) {
+            if (in.hasNext()) {
                 line = in.next();
-                System.out.println("line " + 1);
+                System.out.println(line + " " + 1);
             //Send data back to client
                 out.println(line);
             }
