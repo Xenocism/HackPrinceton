@@ -118,7 +118,9 @@ public class CSEngine {
                 actor.setAY((Double) extras.next());
             } break;
 
-            case packet.CREATE:    moveLeft(a);    break;
+            case packet.CREATE:    {
+                Player player = new Player()
+            }    break;
             case packet.KILL:      moveDown(a);    break;
             case packet.PORT:      moveRight(a);   break;
             default:    break; 
