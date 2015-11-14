@@ -54,14 +54,14 @@ public class CSEngine {
     public void sendEvent(Actor a, int eid) {
         if (a == null) throw new java.lang.IllegalArgumentException("Null Actor to Event (move)");
         int id = a.getID();
-        // switch(id) {
-        //     case UP:    break;
-        //     case LEFT:  break;
-        //     case DOWN:  break;
-        //     case RIGHT: break;
-        //     default:    break;
-        // }
-        receiveMail(a, id);
+        switch(eid) {
+            case UP:    break;
+            case LEFT:  break;
+            case DOWN:  break;
+            case RIGHT: break;
+            default:    break;
+        }
+        package(a, id);
     }
 
     // handle mouse click event given an actor
@@ -98,13 +98,18 @@ public class CSEngine {
 
     //****************************** Package handling
 
-    // public Packet package() {
-    //     //Packet packet = new Packet();
-    // }
+    private void package() {
+        //Packet packet = new Packet();
+    }
 
-    // public Packet unpackage() {
-
-    // }
+    private void unpackage() {
+        Packet present = inbox.poll();
+        int actionId = getActionID();
+        int actorId = getActorID();
+        switch(actionId) {
+            
+        }
+    }
       
     //******************************** simple update call
 
@@ -117,7 +122,7 @@ public class CSEngine {
         }
         if (!inbox.isEmpty()) {
             // handle incoming mail
-            Packet toHandle = inbox.poll();
+            unpackage();
             // do stuff with the packet
         }
     }
