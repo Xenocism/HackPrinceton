@@ -1,3 +1,4 @@
+import java.util.*;
 public class Packet {
     public static final String START = "start";
     public static final String STOP = "stop";
@@ -9,7 +10,7 @@ public class Packet {
 
     private char actionID;
     private int actorID;
-    private Iterable<Object> extras;
+    private LinkedList<Double> extras;
 
     public Packet(char actionID, int actorID) {
         if (actionID < 0 || actionID > Character.MAX_VALUE) 
@@ -19,11 +20,11 @@ public class Packet {
         extras = null;
     }
 
-    public void setExtras(Iterable<Object> extras) {
+    public void setExtras(LinkedList<Double> extras) {
         this.extras = extras;
     }
 
-    public Iterable<Object> getExtras() {
+    public LinkedList<Double> getExtras() {
         return extras;
     }
 
