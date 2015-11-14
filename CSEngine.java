@@ -19,7 +19,6 @@ public class CSEngine {
 
     private LinkedList<Object> extras;
 
-    private CSMailroom mailroom;
     private GameScreen screen;
     
     private int currID;
@@ -34,10 +33,6 @@ public class CSEngine {
 
     public void setGameScreen(GameScreen screen) {
         this.screen = screen;
-    }
-
-    public void setCSMailroom(CSMailroom mailroom) {
-        this.mailroom = mailroom;
     }
 
     // called after mailroom and gamescreen are set, returns true
