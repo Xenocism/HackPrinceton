@@ -6,6 +6,8 @@ public class Actor {
 
     private static final double CUTOFF = 1;
     /*****************************   Variables   ***********************************/
+    private int id; // id of this Actor
+
     private double x;   // x coord of this actor on the screen
     private double vx;  // current x velocity of this Actor 
     private double ax;  // current x acceleration of this Actor
@@ -21,14 +23,16 @@ public class Actor {
     /*****************************   Constructors *********************************/
 
     // empty constructor
-    public Actor() {
+    public Actor(int id) {
+        this.id = id;
         this.x = 0;
         this.y = 0;
         this.imgName = null;
     }
 
     // full constructor
-    public Actor(double x, double y, String imgName) {
+    public Actor(int id, double x, double y, String imgName) {
+        this.id = id;
         this.x = x;
         this.y = y;
         this.maxV = 5;
@@ -113,6 +117,10 @@ public class Actor {
     // returns the filepath for this Actor's Image
     public String getImgName() {
         return this.imgName;
+    }
+
+    public int getID() {
+        return id;
     }
 
     public void update() {
