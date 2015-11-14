@@ -65,7 +65,7 @@ public class CSEngine {
     }
 
     // handle mouse click event given an actor
-    public void sendEvent(Actor a, int id, double x, double y) {
+    public void sendEvent(Actor a, int eid, double x, double y) {
         if (a == null) throw new java.lang.IllegalArgumentException("Null Actor to Event (mouse)");
         switch(id) {
             case UP: break;
@@ -77,7 +77,7 @@ public class CSEngine {
     }
 
     // given mail information, acts accordingly (called from mailroom)
-    public void receiveMail(Actor a, int id) {
+    public void receiveMail(Actor a, int eid) {
         if (a == null) throw new java.lang.IllegalArgumentException("Null Actor to receiveMail");
         switch(id) {
             case UP:    moveUp(a);      break;
@@ -106,8 +106,16 @@ public class CSEngine {
         Packet present = inbox.poll();
         int actionId = getActionID();
         int actorId = getActorID();
+        Actor actor = 
+        Iterable<Object> extras = present.getExtras();
         switch(actionId) {
-            
+            case UPDATE:    {
+
+            }      break;
+            case CREATE:    moveLeft(a);    break;
+            case KILL:      moveDown(a);    break;
+            case PORT:      moveRight(a);   break;
+            default:    break; 
         }
     }
       
