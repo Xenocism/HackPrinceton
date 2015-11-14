@@ -49,16 +49,16 @@ public class GameScreen {
         if (StdDraw.hasNextKeyTyped()) {
             char next = StdDraw.nextKeyTyped();
             switch (next) {
-                case 'w': engine.sendEvent(player, 0); break;
-                case 'a': engine.sendEvent(player, 1); break;
-                case 's': engine.sendEvent(player, 2); break;
-                case 'd': engine.sendEvent(player, 3); break;
+                case 'w': engine.makePackage(player, 0); break;
+                case 'a': engine.makePackage(player, 1); break;
+                case 's': engine.makePackage(player, 2); break;
+                case 'd': engine.makePackage(player, 3); break;
                 }
             }
         if (StdDraw.mousePressed()) {
             mouseX = StdDraw.mouseX();
             mouseY = StdDraw.mouseY();
-            engine.sendEvent(player, 4, mouseX, mouseY);
+            engine.makePackage(player, 4, mouseX, mouseY);
         }
         StdDraw.show(10);
     }

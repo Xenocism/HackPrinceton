@@ -52,7 +52,7 @@ public class CSEngine {
     //********************  Event and mail control
 
     // handle general event given an actor and an id
-    public void sendEvent(Actor a, int eid) {
+    public void makePackage(Actor a, int eid) {
         if (a == null) throw new java.lang.IllegalArgumentException("Null Actor to Event (move)");
         int id = a.getID();
         switch(eid) {
@@ -65,7 +65,7 @@ public class CSEngine {
     }
 
     // handle mouse click event given an actor
-    public void sendEvent(Actor a, int eid, double x, double y) {
+    public void makePackage(Actor a, int eid, double x, double y) {
         if (a == null) throw new java.lang.IllegalArgumentException("Null Actor to Event (mouse)");
         switch(eid) {
             case UP: break;
@@ -97,10 +97,6 @@ public class CSEngine {
     }
 
     //****************************** Package handling
-
-    private void package1(Actor a, int id) {
-        //Packet packet = new Packet();
-    }
 
     private void unpackage() {
         Packet present  = inbox.poll();
