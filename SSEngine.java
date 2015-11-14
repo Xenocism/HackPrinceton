@@ -14,9 +14,9 @@ public class SSEngine {
     private static final int[] yBounds  = new int[]{0, 500};
 
     private static final int impulse = 5;
+    private static final double FRICTION = 0.995;
 
     private RedBlackBST<Integer, Actor> actorTree;
-    private LinkedList<Actor> actors;
 
     private ConcurrentLinkedQueue<Packet> inbox;
     private ConcurrentLinkedQueue<Packet> outbox;
@@ -30,10 +30,6 @@ public class SSEngine {
         this.outbox     = new ConcurrentLinkedQueue<Packet>();
     }
 
-    public void setGameScreen(GameScreen screen) {
-        this.screen = screen;
-    }
-
     // called after mailroom and gamescreen are set, returns true
     // if all checks out, false if not
     public boolean init() {
@@ -45,11 +41,21 @@ public class SSEngine {
         // ping server
         return true;
     }
-    
-    private void unpackage() {
+
+    //********************************* Return in and Outbox
+
+    public ConcurrentLinkedQueue<Packet> getInbox() {
+        return inbox;
     }
 
+    public ConcurrentLinkedQueue<Packet> getOutbox() {
+        return outbox;
+    }
+
+    //********************************* Package Processing
     public void update(int id) {
+
+        if (actortree.get(id) == null) return;
 
         LinkedList<Double> extras = new LinkedList<Double>();
 
@@ -62,11 +68,61 @@ public class SSEngine {
         outbox.add(new Packet(5, id, extras));
     }
 
-      public void giveActor(Actor a) {
+     private void unpackage() {
+        Packet present  = inbox.poll();
+        int actionId    = present.getActionID();
+        int actorId     = present.getActorID();
+        Actor actor     = actorTree.get(actorId);
+        Iterator extras = present.getExtras().iterator();
+        switch(actionId) {
+            case Packet.MOVE: {
+                actor.setVX(extras.next());
+                actor.setVY(extras.next());
+            } break;
+
+            case Packet.CREATE: {
+                giveActor(actor);
+            }        break;
+            case Packet.KILL: {
+                killActor(actorId);
+            } break;
+            case Packet.PORT: {
+                actor.setX((extras.next());
+                actor.setY(extras.next());
+                actor.setVX(0.0);
+                actor.setVY(0.0;
+                actor.setAX(0.0);
+                actor.setAY(0.0;
+            }
+            default:    break; 
+        }
+    }
+
+    //********************************* Create / Delete Actors
+
+    public void giveActor(Actor a) {
         if (a == null) throw new java.lang.IllegalArgumentException("Null Actor to giveActor");
-        actorTree.put(new Integer(idcount + 1), a);
+        actorTree.put(new Integer((idcount + 1), a);
         actors.push(a);
         idcount++;
+    }
+
+    public void killActor(int id) {
+        actorTree.delete(id);
+        Iterable<Integer> keys = actorTree.keys();
+    }
+
+    //******************************** simple update call
+
+    // simple update call to all actors
+    public void run() {
+        if (!inbox.isEmpty()) {
+            // handle incoming mail
+            unpackage();
+        }
+        for (int i = 0, i < idcount; i++) {
+            update(i);
+        }
     }
 
     //********************************* Move actor calls
@@ -102,4 +158,5 @@ public class SSEngine {
         currVX += impulse;
         a.setVX(currVX);
     }
+
 }

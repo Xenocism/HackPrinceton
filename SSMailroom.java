@@ -37,8 +37,6 @@ public class SSMailroom {
         }
     }
 
-    
-
     public void listenSocket() {
         String line;
         while (true) {
@@ -49,11 +47,5 @@ public class SSMailroom {
                 out.println(line);
             }
         }
-    }
-
-    public static void main(String args[]) {
-        SSMailroom testServer = new SSMailroom();
-        testServer.initSocket();
-        testServer.listenSocket();
     }
 }
