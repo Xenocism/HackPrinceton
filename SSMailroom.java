@@ -50,13 +50,17 @@ public class SSMailroom {
                 System.out.println("" + actorID + 1);
                 System.out.println("" + extra1 + 1);
                 System.out.println("" + extra2 + 1);
-
-                out.print(actionID);
-                out.print(actorID);
-                out.print(extra1);
-                out.print(extra2);
-                out.flush();
-            }
+                
+             }
         }
     }
+   
+   public void transmit() {
+      out.println("Help");
+      out.println("Help2");
+      System.out.println("HELP");
+      out.println("Help3");
+      out.println("Help4");
+
+   }
 }
