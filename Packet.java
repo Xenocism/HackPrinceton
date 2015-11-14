@@ -5,6 +5,7 @@ public class Packet {
     public static final char CREATE = 2;
     public static final char KILL = 3;
     public static final char PORT = 4;
+    public static final char UPDATE = 5;
 
     private char actionID;
     private int actorID;
