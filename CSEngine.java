@@ -2,6 +2,7 @@
 import java.util.TreeMap;
 import java.util.LinkedList;
 import java.util.concurrent.ConcurrentLinkedQueue;
+import java.util.Iterator;
 
 public class CSEngine {
     private static final int UP     = 0;
@@ -66,7 +67,7 @@ public class CSEngine {
     // handle mouse click event given an actor
     public void sendEvent(Actor a, int eid, double x, double y) {
         if (a == null) throw new java.lang.IllegalArgumentException("Null Actor to Event (mouse)");
-        switch(id) {
+        switch(eid) {
             case UP: break;
             case LEFT: break;
             case DOWN: break;
@@ -78,7 +79,7 @@ public class CSEngine {
     // given mail information, acts accordingly (called from mailroom)
     public void receiveMail(Actor a, int eid) {
         if (a == null) throw new java.lang.IllegalArgumentException("Null Actor to receiveMail");
-        switch(id) {
+        switch(eid) {
             case UP:    moveUp(a);      break;
             case LEFT:  moveLeft(a);    break;
             case DOWN:  moveDown(a);    break;
@@ -97,18 +98,18 @@ public class CSEngine {
 
     //****************************** Package handling
 
-    private void package(Actor a, int id) {
+    private void package1(Actor a, int id) {
         //Packet packet = new Packet();
     }
 
     private void unpackage() {
-        Packet present = inbox.poll();
-        int actionId = getActionID();
-        int actorId = getActorID();
-        Actor actor = actorTree.get(actorId);
-        Iterable<Object> extras = present.getExtras();
+        Packet present  = inbox.poll();
+        int actionId    = present.getActionID();
+        int actorId     = present.getActorID();
+        Actor actor     = actorTree.get(actorId);
+        Iterator extras = present.getExtras().iterator();
         switch(actionId) {
-            case packet.UPDATE:    {
+            case Packet.UPDATE:    {
                 actor.setX((Double) extras.next());
                 actor.setY((Double) extras.next());
                 actor.setVX((Double) extras.next());
@@ -116,9 +117,9 @@ public class CSEngine {
                 actor.setAX((Double) extras.next());
                 actor.setAY((Double) extras.next());
             }      break;
-            case CREATE:    moveLeft(a);    break;
-            case KILL:      moveDown(a);    break;
-            case PORT:      moveRight(a);   break;
+            case Packet.CREATE:        break;
+            case Packet.KILL:          break;
+            case Packet.PORT:         break;
             default:    break; 
         }
     }
