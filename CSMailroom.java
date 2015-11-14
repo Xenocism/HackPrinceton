@@ -105,11 +105,6 @@ public class CSMailroom {
                         actorID = in.nextInt();
                         break;
                     }
-                    case Packet.PORT: {
-                        actorID = in.nextInt();
-                        extras.add(in.nextDouble());
-                        extras.add(in.nextDouble());
-                    }
                 }
             }
             Packet send = new Packet(actionID, actorID);
