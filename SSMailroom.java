@@ -42,7 +42,7 @@ public class SSMailroom {
         while (true) {
             if (in.hasNext()) {
                 line = in.next();
-                System.out.println("line " + 1);
+                System.out.println(line + " " + 1);
             //Send data back to client
                 out.println(line);
             }
