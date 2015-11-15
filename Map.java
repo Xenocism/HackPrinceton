@@ -7,13 +7,11 @@ public class Map {
     private LinkedList<Terrain> dirt;
     private LinkedList<Well> gravity;
     private int count;
-    private GameScreen screen;
     private Well[] chunks;
 
-	public Map(GameScreen screen) {
+	public Map() {
 
 		this.count = 0;
-		this.screen = screen;
 		this.dirt = new LinkedList<Terrain>();
 		this.gravity = new LinkedList<Well>();
 		this.chunks = new Well[10];
@@ -28,7 +26,6 @@ public class Map {
 		for (int i = 0; i < 10; i++) {
 			chunks[i] = new Well();
 		}
-		screen.setTerrain(getMap());
 
 		int id = 0;
 		for (int i = 0; i < 100; i++) {
@@ -37,6 +34,10 @@ public class Map {
 				chunks[0].add(returnt(i, j));
 				id++;
 			}
+		}
+
+		for (int i = 30; i < 20; i++) {
+
 		}
 	}
 
@@ -67,7 +68,7 @@ public class Map {
 	            dirt.add(dirtTree.get(i));
 	        }
 	        terrMap[x][y] = null;
-	        screen.setTerrain(dirt);
+	        //screen.setTerrain(dirt);
 	    }
 	}
 
