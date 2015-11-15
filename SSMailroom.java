@@ -51,16 +51,17 @@ public class SSMailroom {
                 System.out.println("" + extra1 + 1);
                 System.out.println("" + extra2 + 1);
                 
+                transmit();
              }
         }
     }
    
    public void transmit() {
-      out.println("Help");
-      out.println("Help2");
+      out.println(15);
+      out.println(12);
       System.out.println("HELP");
-      out.println("Help3");
-      out.println("Help4");
+      out.println(30.0);
+      out.println(31.0);
 
    }
 }
