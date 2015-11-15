@@ -10,8 +10,6 @@ public class CSGame {
 
         game.setEngine(engine);
         engine.setGameScreen(game);
-        engine.setSSEngine(ssEngine); // test change
-        ssEngine.setCSEngine(engine); // test change
 
         game.init();
         engine.init();
