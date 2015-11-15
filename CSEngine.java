@@ -23,16 +23,11 @@ public class CSEngine {
     private ConcurrentLinkedQueue<Packet> inbox;
     private ConcurrentLinkedQueue<Packet> outbox;
 
-    private ConcurrentLinkedQueue<Packet> ssInbox;
-
     private GameScreen screen;
 
     // Constructor, init and setters
 
     //********** TEMP METHOD****************
-    public void setSSEngine(SSEngine engine) {
-        this.ssInbox = engine.getInbox();
-    }
 
     public CSEngine() {
         this.actors     = new LinkedList<Actor>();
@@ -65,7 +60,6 @@ public class CSEngine {
         extras.add(0.0);
         create.setExtras(extras);
         outbox.add(create);
-        ssInbox.add(create);
         return true;
     }
 
@@ -103,7 +97,6 @@ public class CSEngine {
         if (toSend != null) {
             toSend.setExtras(extras);
             outbox.add(toSend);
-            ssInbox.add(toSend);
         }
     }
 
@@ -119,7 +112,6 @@ public class CSEngine {
         if (toSend != null) {
             toSend.setExtras(extras);
             outbox.add(toSend);
-            ssInbox.add(toSend);
         }
     }
 
@@ -138,7 +130,6 @@ public class CSEngine {
         extras.add(ay);
         toSend.setExtras(extras);
         outbox.add(toSend);
-        ssInbox.add(toSend);
     }
 
     public ConcurrentLinkedQueue<Packet> getInbox() {
