@@ -90,6 +90,9 @@ public class CSEngine {
                 extras.add(a.getVX() + IMPULSE);
                 extras.add(a.getVY());
             } break;
+            case Packet.KILL: {
+                toSend = new Packet(Packet.KILL, aid);
+            }
             default:    break;
         }
         if (toSend != null) {
@@ -186,40 +189,6 @@ public class CSEngine {
             unpackage();
         }
     }
-
-    //********************************* Move actor calls
-
-    // // give Actor a an up impulse
-    // private void moveUp(Actor a) {
-    //     if (a == null) throw new java.lang.IllegalArgumentException("Null Actor to moveUp");
-    //     double currVY = a.getVY();
-    //     currVY += impulse;
-    //     a.setVY(currVY);
-    // }
-
-    // // give Actor a a down impulse
-    // private void moveDown(Actor a) {
-    //     if (a == null) throw new java.lang.IllegalArgumentException("Null Actor to moveDown");
-    //     double currVY = a.getVY();
-    //     currVY -= impulse;
-    //     a.setVY(currVY);
-    // }
-
-    // // give Actor a a left impulse
-    // private void moveLeft(Actor a) {
-    //     if (a == null) throw new java.lang.IllegalArgumentException("Null Actor to moveLeft");
-    //     double currVX = a.getVX();
-    //     currVX -= impulse;
-    //     a.setVX(currVX);
-    // }
-
-    // // give Actor a a right impulse
-    // private void moveRight(Actor a) {
-    //     if (a == null) throw new java.lang.IllegalArgumentException("Null Actor to moveRight");
-    //     double currVX = a.getVX();
-    //     currVX += impulse;
-    //     a.setVX(currVX);
-    // }
 
     //************************** Actor give/kill calls
 
