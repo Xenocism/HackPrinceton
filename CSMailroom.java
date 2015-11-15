@@ -51,18 +51,13 @@ public class CSMailroom {
     public void receivePacket() {
         if (in.hasNextInt()) {
             int actionID = in.nextInt();
-            System.out.println(actionID);
-        
-        //if (in.hasNextInt()) {
             int actorID = in.nextInt();
-            System.out.println("" + actorID);
-        //}
-        //if (in.hasNextDouble()) {
             double extra1 = in.nextDouble();
-            System.out.println("" + extra1);
-        //}
-        //if (in.hasNextDouble()) {
             double extra2 = in.nextDouble();
+
+            System.out.println(actionID);
+            System.out.println("" + actorID);
+            System.out.println("" + extra1);
             System.out.println("" + extra2);
         }
     }
@@ -71,12 +66,12 @@ public class CSMailroom {
     public void sendPacket() {
         if (!inbox.isEmpty()) {
             char actionID = packet.getActionID();
-            out.println(Packet.START);
-            out.println(actionID);
+            out.print(Packet.START);
+            out.print(actionID);
 
             switch (actionID) {
                 case Packet.MOVE: {
-                    out.println(packet.getActorID());
+                    out.print(packet.getActorID());
                     for (Object val : packet.getExtras()) {
                         out.print(val);
                     }
@@ -84,14 +79,14 @@ public class CSMailroom {
                 }
                 case Packet.CREATE: {
                     for (Object val : packet.getExtras()) {
-                        out.println(val);
+                        out.print(val);
                     }
                     break;
                 }
                 case Packet.PORT: {
-                    out.println(packet.getActorID());
+                    out.print(packet.getActorID());
                     for (Object val : packet.getExtras()) {
-                        out.println(val);
+                        out.print(val);
                     }
                     break;
                 }
@@ -99,7 +94,7 @@ public class CSMailroom {
                     break;
                 }
             }
-            out.println(Packet.STOP);
+            out.print(Packet.STOP);
             out.flush();
         }
     }
