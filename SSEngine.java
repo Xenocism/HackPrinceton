@@ -11,7 +11,7 @@ public class SSEngine {
     private static final int DOWN   = 2;
     private static final int RIGHT  = 3;
 
-    private static final String[] images = {"images\\mdkp.png", "images\\dirt.png"};
+    private static final String[] images = {"images\\mdkp.png"};
 
     private static final int impulse = 5;
     private static final double FRICTION = 0.995;
@@ -50,25 +50,28 @@ public class SSEngine {
 
     //********************************* Package Processing
     public void update(int id) {
-
+//       System.out.println("Updating...");
         if (actorTree.get(id) == null) return;
 
         LinkedList<Double> extras = new LinkedList<Double>();
+        
+        if (actorTree.get(id).getVX() != 0 || actorTree.get(id).getVY() != 0) {
+           extras.add(actorTree.get(id).getX());
+           extras.add(actorTree.get(id).getY());
+           extras.add(actorTree.get(id).getVX());
+           extras.add(actorTree.get(id).getVY());
+           extras.add(actorTree.get(id).getAX());
+           extras.add(actorTree.get(id).getAY());
+           Packet toReturn = new Packet(Packet.UPDATE, id);
+           toReturn.setExtras(extras);
+           outbox.add(toReturn);
+        }
 
-        extras.add(actorTree.get(id).getX());
-        extras.add(actorTree.get(id).getY());
-        extras.add(actorTree.get(id).getVX());
-        extras.add(actorTree.get(id).getVY());
-        extras.add(actorTree.get(id).getAX());
-        extras.add(actorTree.get(id).getAY());
-        Packet toReturn = new Packet(Packet.UPDATE, id);
-        toReturn.setExtras(extras);
-        outbox.add(toReturn);
     }
 
     public void createPackage(int id) {
 
-       System.out.println("Creating package");
+//       System.out.println("Creating package");
        LinkedList<Double> extras = new LinkedList<Double>();
        extras.add((double) id);
        extras.add(actorTree.get(id).getX());
@@ -80,7 +83,7 @@ public class SSEngine {
        Packet toReturn = new Packet(Packet.CREATE, id);
        toReturn.setExtras(extras);
        outbox.add(toReturn);
-       System.out.println("Package in outbox");
+//       System.out.println("Package in outbox");
     }
 
         public void killPackage(int id) {
@@ -91,7 +94,7 @@ public class SSEngine {
         }
 
      private void unpackage() {
-        System.out.println("Unpackaging");
+//        System.out.println("Unpackaging");
         Packet present  = inbox.poll();
         int actionId    = present.getActionID();
         int actorId     = present.getActorID();
@@ -99,15 +102,19 @@ public class SSEngine {
         Iterator extras = present.getExtras().iterator();
         switch(actionId) {
             case Packet.MOVE: {   
+//               System.out.println("Actor vx: " + actor.getVX());
+//               System.out.println("Actor vy: " + actor.getVY());
                 actor.setVX((Double) extras.next());
                 actor.setVY((Double) extras.next());
+//               System.out.println("Actor vx: " + actor.getVX());
+//               System.out.println("Actor vy: " + actor.getVY());
             } break;
 
             case Packet.CREATE: {
-                int index =  (int) ((double) extras.next());
+               int index =  (int) ((double) extras.next());
                 giveActor(index, (Double) extras.next(), (Double) extras.next(), (Double) extras.next(), 
                     (Double) extras.next(), (Double) extras.next(), (Double) extras.next(), images[index]);
-                System.out.println("Handled create package");
+//                System.out.println("Handled create package");
             } break;
             case Packet.KILL: {
                 killActor(actorId);
@@ -119,15 +126,17 @@ public class SSEngine {
                 actor.setVY(0.0);
                 actor.setAX(0.0);
                 actor.setAY(0.0);
-            }
+            } break;
             default: break; 
         }
+
+//        System.out.println("Unpackage finished");
     }
 
     //********************************* Create / Delete Actors
 
     public void giveActor(int type, double x, double y, double vx, double vy, double ax, double ay, String pic) {
-       System.out.println("Setting aspects");
+//       System.out.println("Setting aspects " + type);
         if (type == 0) {
             Player a = new Player((idcount), x, y, pic);
             a.setVX(vx);
@@ -139,7 +148,7 @@ public class SSEngine {
             createPackage(idcount);
             idcount++;
         }
-        System.out.println("Finished setting aspects");
+//        System.out.println("Finished setting aspects");
     }
 
     public void killActor(int id) {
@@ -151,19 +160,27 @@ public class SSEngine {
 
     // simple update call to all actors
     public void run() {
+//       System.out.println("Calling run");
         if (!inbox.isEmpty()) {
             // handle incoming mail
             unpackage();
         }
+        
         for (int i = 0; i < idcount; i++) {
+//           System.out.println("Update " + i + idcount);
             actorTree.get(i).update();
+            actorTree.get(i).setVX(actorTree.get(i).getVX()*FRICTION);
+            actorTree.get(i).setVY(actorTree.get(i).getVY()*FRICTION);
             update(i);
         }
+        
+//        System.out.println("Run finished with outbox size " + outbox.size());
     }
 
     //********************************* Move actor calls
 
     // give Actor a an up impulse
+/*
     private void moveUp(Actor a) {
         if (a == null) throw new java.lang.IllegalArgumentException("Null Actor to moveUp");
         double currVY = a.getVY();
@@ -194,5 +211,5 @@ public class SSEngine {
         currVX += impulse;
         a.setVX(currVX);
     }
-
+*/
 }
