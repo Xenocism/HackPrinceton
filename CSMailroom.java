@@ -115,8 +115,8 @@ public class CSMailroom {
             for (double val : packet.getExtras()) {
                 out.println(val);
             }
-            //out.println(Packet.STOP);
-            //out.println();
+            // out.println(Packet.STOP);
+            // out.println();
             System.out.println("Sent");
         }
     }
