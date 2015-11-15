@@ -65,7 +65,6 @@ public class CSMailroom {
     // }
 
     public void sendPacket() {
-        System.out.println("sendpacket Called");
         int actionID;
         int actorID;
         if (!inbox.isEmpty()) {
@@ -90,7 +89,7 @@ public class CSMailroom {
                     if (packet.getExtras() == null) {
                         throw new NullPointerException("Packets cannot have a null Extras (for now)");
                     }
-                    if (extras.size() != 4)
+                    if (extras.size() != 7)
                         return;
                     break;
                 }
