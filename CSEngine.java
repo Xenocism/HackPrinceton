@@ -63,6 +63,53 @@ public class CSEngine {
 
     //********************  Event and mail control
 
+    public ConcurrentLinkedQueue<Packet> getInbox() {
+        return inbox;
+    }
+
+    public ConcurrentLinkedQueue<Packet> getOutbox() {
+        return outbox;
+    }
+
+    //****************************** Package handling
+
+    private void unpackage() {
+        Packet present  = inbox.poll();
+        int actionId    = present.getActionID();
+        int actorId     = present.getActorID();
+        Actor actor     = actorTree.get(actorId);
+        Iterator extras = present.getExtras().iterator();
+        if (actionId != 5)
+            System.out.println("actionid: " + actionId);
+        switch(actionId) {
+            case Packet.UPDATE:    {
+                actor.setX((Double) extras.next());
+                actor.setY((Double) extras.next());
+                actor.setVX((Double) extras.next());
+                actor.setVY((Double) extras.next());
+                actor.setAX((Double) extras.next());
+                actor.setAY((Double) extras.next());
+            } break;
+
+            case Packet.CREATE: {
+                Player toAdd = new Player(actorId);
+                int type = (int) (double) extras.next();
+                toAdd.setX((Double) extras.next());
+                toAdd.setY((Double)extras.next());
+                toAdd.setVX((Double)extras.next());
+                toAdd.setVY((Double)extras.next());
+                toAdd.setAX((Double)extras.next());
+                toAdd.setAY((Double)extras.next());
+                toAdd.setImgName(images[type]);
+                giveActor(toAdd, actorId);
+            } break;
+            case Packet.KILL:  {
+                killActor(actorId);
+            } break;
+            default:    break; 
+        }
+    }
+
     // handle general event given an actor and an id
     public void makePackage(Actor a, int eid) {
         if (a == null) throw new java.lang.IllegalArgumentException("Null Actor to Event (move)");
@@ -117,8 +164,7 @@ public class CSEngine {
     }
 
     // makepackage for creating an actor
-    public void makePackage(int actorType, double x, double y, double vx, 
-                            double vy, double ax, double ay) {
+    public void makePackage(int actorType, double x, double y, double vx, double vy, double ax, double ay) {
         Packet toSend = new Packet(Packet.CREATE, -1);
         LinkedList<Double> extras = new LinkedList<Double>();
         Double typeConv = new Double(actorType);
@@ -132,53 +178,6 @@ public class CSEngine {
         toSend.setExtras(extras);
         outbox.add(toSend);
     }
-
-    public ConcurrentLinkedQueue<Packet> getInbox() {
-        return inbox;
-    }
-
-    public ConcurrentLinkedQueue<Packet> getOutbox() {
-        return outbox;
-    }
-
-    //****************************** Package handling
-
-    private void unpackage() {
-        Packet present  = inbox.poll();
-        int actionId    = present.getActionID();
-        int actorId     = present.getActorID();
-        Actor actor     = actorTree.get(actorId);
-        Iterator extras = present.getExtras().iterator();
-        if (actionId != 5)
-            System.out.println("actionid: " + actionId);
-        switch(actionId) {
-            case Packet.UPDATE:    {
-                actor.setX((Double) extras.next());
-                actor.setY((Double) extras.next());
-                actor.setVX((Double) extras.next());
-                actor.setVY((Double) extras.next());
-                actor.setAX((Double) extras.next());
-                actor.setAY((Double) extras.next());
-            } break;
-
-            case Packet.CREATE: {
-                Player toAdd = new Player(actorId);
-                int type = (int) (double) extras.next();
-                toAdd.setX((Double) extras.next());
-                toAdd.setY((Double)extras.next());
-                toAdd.setVX((Double)extras.next());
-                toAdd.setVY((Double)extras.next());
-                toAdd.setAX((Double)extras.next());
-                toAdd.setAY((Double)extras.next());
-                toAdd.setImgName(images[type]);
-                giveActor(toAdd, actorId);
-            } break;
-            case Packet.KILL:  {
-                killActor(actorId);
-            } break;
-            default:    break; 
-        }
-    }
       
     //******************************** simple update call
 
@@ -190,7 +189,7 @@ public class CSEngine {
         }
     }
 
-    //************************** Actor give/kill calls
+    //************************** Actor calls
 
     // returns all active actors this engine controls
     public Iterable<Actor> getActors() {
