@@ -53,7 +53,7 @@ public class GameScreen {
                 }
             }
             for (Terrain t : map) {
-                StdDraw.picture((t.getX() + xshift), (t.getY() + yshift), a.getImgName());
+                StdDraw.picture((t.getX() + xshift), (t.getY() + yshift), t.getImgName());
             }
 
             StdDraw.rectangle(500.0 + xshift, 250.0 + yshift, 500.0, 250.0);
@@ -70,7 +70,7 @@ public class GameScreen {
             if (StdDraw.mousePressed()) {
                 mouseX = StdDraw.mouseX();
                 mouseY = StdDraw.mouseY();
-                engine.makePackage(player, 4, mouseX, mouseY);
+                engine.makePackage(player, 4, (mouseX - xshift), (mouseY - yshift));
             }
         }
         StdDraw.show(10);

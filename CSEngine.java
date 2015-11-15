@@ -21,6 +21,7 @@ public class CSEngine {
     private ConcurrentLinkedQueue<Packet> outbox;
 
     private GameScreen screen;
+    private Map terrain;
 
     // Constructor, init and setters
 
@@ -48,6 +49,7 @@ public class CSEngine {
         // ping server
         Packet create = new Packet(Packet.CREATE, -1);
         LinkedList<Double> extras = new LinkedList<Double>();
+        terrain = new Map(screen);
         extras.add(0.0);
         extras.add(500.0);
         extras.add(200.0);
