@@ -73,6 +73,6 @@ public class GameScreen {
                 engine.makePackage(player, 4, (mouseX - xshift), (mouseY - yshift));
             }
         }
-        StdDraw.show(10);
+        StdDraw.show(1);
     }
 }
