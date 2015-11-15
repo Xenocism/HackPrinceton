@@ -10,8 +10,8 @@ public class CSMailroomRunner extends Thread {
 
     public void run() {
         room.initSocket("45.79.129.43");
-        room.sendPacket();
         while (true) {
+            room.sendPacket();
             room.receivePacket();
         }
     }

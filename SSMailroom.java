@@ -8,10 +8,14 @@ public class SSMailroom {
     private Socket client;
     private Scanner in;
     private PrintWriter out;
-    private ConcurrentLinkedQueue<Packet> actions;
+    private SSEngine engine;
+    private ConcurrentLinkedQueue<Packet> inbox;
+    private ConcurrentLinkedQueue<Packet> outbox;
 
-    public SSMailroom() {
-        actions = new ConcurrentLinkedQueue<Packet>();
+    public SSMailroom(SSEngine engine) {
+        this.engine = engine;
+        inbox = engine.getOutbox();
+        outbox = engine.getInbox();
     }
 
     public void initSocket() {
@@ -97,14 +101,14 @@ public class SSMailroom {
             return;
         Packet send = new Packet(actionID, actorID);
         send.setExtras(extras);
-        actions.add(send);
+        outbox.add(send);
     }
 
     public void sendPacket() {
         int actionID;
         int actorID;
-        if (!actions.isEmpty()) {
-            Packet packet = actions.poll();
+        if (!inbox.isEmpty()) {
+            Packet packet = inbox.poll();
             LinkedList<Double> extras = packet.getExtras();
             
             actionID = packet.getActionID();
