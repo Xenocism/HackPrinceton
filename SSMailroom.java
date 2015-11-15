@@ -7,9 +7,10 @@ public class SSMailroom {
     private Socket client;
     private Scanner in;
     private PrintWriter out;
+    private ConcurrentLinkedQueue<Packet> actions;
 
     public SSMailroom() {
-
+        actions = ConcurrentLinkedQueue<Packet>();
     }
 
     public void initSocket() {
@@ -41,27 +42,113 @@ public class SSMailroom {
         String line;
         while (true) {
             if(in.hasNext()) {
-                char actionID = in.next().charAt(0);
-                int actorID = in.nextInt();
-                double extra1 = in.nextDouble();
-                double extra2 = in.nextDouble();
+                if (in.next().equals(Packet.START)) {
+                    receivePacket();
+                    sendPacket();
+                }
+            }
+        }
+    }
 
-                System.out.println(actionID + 1);
-                System.out.println("" + actorID + 1);
-                System.out.println("" + extra1 + 1);
-                System.out.println("" + extra2 + 1);
-                
-                transmit();
-             }
+    public void receivePacket() {
+        int actionID;
+        int actorID; 
+        LinkedList<Double> extras;
+        if (in.hasNextInt()) {
+            actionID = in.nextInt();
+        }
+        if (in.hasNextInt()) {
+            actorID = in.nextInt();
+        }
+        
+        switch(actionID) {
+            case Packet.UPDATE: {
+                extras = new LinkedList<Double>();
+                for (int i = 0; i < 6; i++) {
+                    extras.add(in.nextDouble());
+                }
+                break;
+            }
+            case Packet.CREATE: {
+                extras = new LinkedList<Double>();
+                for (int i = 0; i < 7; i++) {
+                    extras.add(in.nextDouble());
+                }
+                break;
+            }
+            case Packet.KILL: {
+                break;
+            }
+            case Packet.PORT {
+                extras = new LinkedList<Double>();
+                for (int i = 0; i < 2; i++) {
+                    extras.add(in.nextDouble());
+                }
+                break;
+            }
+            default{
+                break;
+            }
+        }
+        if (!in.next().equals(Packet.STOP))
+            return;
+        Packet send = new Packet(actionID, actorID);
+        send.setExtras(extras);
+        outbox.add(send);
+    }
+
+    public void sendPacket() {
+        int actionID;
+        int actorID;
+        if (!inbox.isEmpty()) {
+            Packet packet = inbox.poll();
+            LinkedList<Double> extras = packet.getExtras();
+            
+            actionID = packet.getActionID();
+            actorID = packet.getActorID();
+
+            //validate packet extras
+            switch (actionID) {
+                case Packet.MOVE: {
+                    if (extras == null) {
+                        throw new NullPointerException();
+                    }
+                    if (extras.size() != 2 || actorID < 0)
+                        return;
+                    break;
+                }
+                case Packet.CREATE: {
+                    if (extras == null) {
+                        throw new NullPointerException();
+                    }
+                    if (extras.size() != 4)
+                        return;
+                    break;
+                }
+                case Packet.PORT: {
+                    if (extras == null) {
+                        throw new NullPointerException();
+                    }
+                    if (extras.size() != 2 || actorID < 0)
+                        return;
+                }
+                case Packet.KILL: {
+                    extras = null;
+                }
+                default: {
+                    break;
+                }
+            }
+
+            out.println(Packet.START);
+            out.println(actionID);
+            out.println(actorID)
+            for (double val : packet.getExtras()) {
+                out.println(val);
+            }
+            out.println(Packet.STOP);
+            out.flush();
         }
     }
    
-   public void transmit() {
-      out.println(15);
-      out.println(12);
-      System.out.println("HELP");
-      out.println(30.0);
-      out.println(31.0);
-
-   }
 }
