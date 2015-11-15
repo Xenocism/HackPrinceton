@@ -11,7 +11,7 @@ public class SSEngine {
     private static final int DOWN   = 2;
     private static final int RIGHT  = 3;
 
-    private static final String[] images = {"images\\mdkp.png"};
+    private static final String[] images = {"images\\mdkp.png", "images\\dirt.png"};
 
     private static final int impulse = 5;
     private static final double FRICTION = 0.995;
