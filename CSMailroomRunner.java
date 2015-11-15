@@ -9,15 +9,10 @@ public class CSMailroomRunner extends Thread {
     }   
 
     public void run() {
-        Scanner in = new Scanner(System.in);
         room.initSocket("45.79.129.43");
-
-        while(true) {
-            if (in.hasNext()) {
-                String line = in.next();
-                room.transmit(line);
-                room.receive();
-            }
+        room.sendPacket();
+        while (true) {
+            room.receivePacket();
         }
     }
 }
