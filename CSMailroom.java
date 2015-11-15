@@ -109,13 +109,13 @@ public class CSMailroom {
                 }
             }
 
-            out.println(Packet.START);
+            //out.println(Packet.START);
             out.println(actionID);
             out.println(actorID);
             for (double val : packet.getExtras()) {
                 out.println(val);
             }
-            // out.println(Packet.STOP);
+            out.println(Packet.STOP);
             // out.println();
             System.out.println("Sent");
         }

@@ -8,6 +8,7 @@ public class CSGame {
         GameScreen game = new GameScreen();
         //CSMailroomRunner run = new CSMailroomRunner(mail);
         mail.initSocket("45.79.129.43");
+
         game.setEngine(engine);
         engine.setGameScreen(game);
 

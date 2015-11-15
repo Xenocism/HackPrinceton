@@ -28,6 +28,7 @@ public class CSEngine {
     //********** TEMP METHOD****************
 
     public CSEngine() {
+
         this.actors     = new LinkedList<Actor>();
         this.actorTree  = new RedBlackBST<Integer, Actor>();
         this.inbox      = new ConcurrentLinkedQueue<Packet>();
@@ -80,8 +81,6 @@ public class CSEngine {
         int actorId     = present.getActorID();
         Actor actor     = actorTree.get(actorId);
         Iterator extras = present.getExtras().iterator();
-        if (actionId != 5)
-            System.out.println("actionid: " + actionId);
         switch(actionId) {
             case Packet.UPDATE:    {
                 actor.setX((Double) extras.next());
@@ -200,7 +199,6 @@ public class CSEngine {
 
     public void giveActor(Actor a, int id) {
         if (a == null) throw new java.lang.IllegalArgumentException("Null Actor to giveActor");
-        System.out.println("Heyo");
         actorTree.put(new Integer(id), a);
         actors.push(a);
         screen.setActors(actors);
