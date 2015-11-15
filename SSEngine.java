@@ -70,7 +70,7 @@ public class SSEngine {
         extras.add(actorTree.get(id).getVY());
         extras.add(actorTree.get(id).getAX());
         extras.add(actorTree.get(id).getAY());
-        Packet toReturn = new Packet('5', id);
+        Packet toReturn = new Packet(Packet.UPDATE, id);
         toReturn.setExtras(extras);
         outbox.add(toReturn);
         test.add(toReturn);
@@ -81,14 +81,14 @@ public class SSEngine {
         if (actorTree.get(id) == null) return;
 
         LinkedList<Double> extras = new LinkedList<Double>();
-
+        extras.add((double)id);
         extras.add(actorTree.get(id).getX());
         extras.add(actorTree.get(id).getY());
         extras.add(actorTree.get(id).getVX());
         extras.add(actorTree.get(id).getVY());
         extras.add(actorTree.get(id).getAX());
         extras.add(actorTree.get(id).getAY());
-        Packet toReturn = new Packet('2', id);
+        Packet toReturn = new Packet(Packet.CREATE, id);
         toReturn.setExtras(extras);
         outbox.add(toReturn);
         test.add(toReturn);
@@ -102,12 +102,13 @@ public class SSEngine {
         Iterator extras = present.getExtras().iterator();
         switch(actionId) {
             case Packet.MOVE: {
+                System.out.println(actionId);   
                 actor.setVX((Double) extras.next());
                 actor.setVY((Double) extras.next());
             } break;
 
             case Packet.CREATE: {
-                int index = (int) extras.next();
+                int index =  (int) ((double) extras.next());
                 giveActor(index, (Double) extras.next(), (Double) extras.next(), (Double) extras.next(), 
                     (Double) extras.next(), (Double) extras.next(), (Double) extras.next(), images[index]);
             } break;
@@ -129,14 +130,14 @@ public class SSEngine {
     //********************************* Create / Delete Actors
 
     public void giveActor(int type, double x, double y, double vx, double vy, double ax, double ay, String pic) {
-        if (type == 1) {
-            Player a = new Player((idcount + 1), x, y, pic);
+        if (type == 0) {
+            Player a = new Player((idcount), x, y, pic);
             a.setVX(vx);
             a.setVY(vy);
             a.setAX(ax);
             a.setAY(ay);
-            actorTree.put((idcount + 1), a);
-            createpackage(idcount + 1);
+            actorTree.put((idcount), a);
+            createpackage(idcount);
             idcount++;
         }
     }
@@ -151,6 +152,7 @@ public class SSEngine {
     // simple update call to all actors
     public void run() {
         if (!inbox.isEmpty()) {
+            System.out.println("got mail ss");
             // handle incoming mail
             unpackage();
         }
