@@ -8,8 +8,8 @@ public class CSMailroom {
     private PrintWriter out;
     private Scanner in;
     //private CSEngine engine;
-    //private ConcurrentLinkedQueue<Packet> inbox;
-    //private ConcurrentLinkedQueue<Packet> outbox;
+    private ConcurrentLinkedQueue<Packet> inbox;
+    private ConcurrentLinkedQueue<Packet> outbox;
     
     public CSMailroom() {
         //this.engine = engine;
@@ -40,6 +40,7 @@ public class CSMailroom {
         }
     }
 
+    /*
     public void sendPacket() {
         out.println(Packet.MOVE);
         out.println(3);
@@ -47,6 +48,7 @@ public class CSMailroom {
         out.println(2.0);
         out.flush();
     }
+    */
 
     public void receivePacket() {
         if (in.hasNextInt()) {
@@ -62,43 +64,49 @@ public class CSMailroom {
         }
     }
 
-/*
     public void sendPacket() {
+        int actionID;
+        int actorID;
         if (!inbox.isEmpty()) {
-            char actionID = packet.getActionID();
-            out.print(Packet.START);
-            out.print(actionID);
+            Packet packet = inbox.poll();
+            LinkedList<Double> extras = packet.getExtras();
+            if (packet.getExtras() == null) {
+                throw new NullPointerException("Packets cannot have a null Extras (for now)");
+            }
+            actionID = packet.getActionID();
+            actorID = packet.getActorID();
 
+            //validate packet extras
             switch (actionID) {
                 case Packet.MOVE: {
-                    out.print(packet.getActorID());
-                    for (Object val : packet.getExtras()) {
-                        out.print(val);
-                    }
+                    if (extras.size() != 2 || actorID < 0)
+                        return;
                     break;
                 }
                 case Packet.CREATE: {
-                    for (Object val : packet.getExtras()) {
-                        out.print(val);
-                    }
+                    if (extras.size() != 4)
+                        return;
                     break;
                 }
                 case Packet.PORT: {
-                    out.print(packet.getActorID());
-                    for (Object val : packet.getExtras()) {
-                        out.print(val);
-                    }
-                    break;
+                    if (extras.size() != 2 || actorID < 0)
+                        return;
                 }
                 default: {
                     break;
                 }
             }
-            out.print(Packet.STOP);
+
+            out.println(Packet.START);
+            out.println(actionID);
+            out.println(actorID)
+            for (double val : packet.getExtras()) {
+                out.println(val);
+            }
+            out.println(Packet.STOP);
             out.flush();
         }
     }
-*/
 
 /*
     public void receivePacket() {
