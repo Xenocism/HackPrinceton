@@ -41,35 +41,42 @@ public class CSMailroom {
     }
 
     public void sendPacket() {
-        out.print(Packet.MOVE);
-        out.print(3);
-        out.print(1.0);
-        out.print(2.0);
+        out.println(Packet.MOVE);
+        out.println(3);
+        out.println(1.0);
+        out.println(2.0);
         out.flush();
     }
 
     public void receivePacket() {
-        char actionID = in.next().charAt(0);
-        int actorID = in.nextInt();
-        double extra1 = in.nextDouble();
-        double extra2 = in.nextDouble();
-
-        System.out.println(actionID + 2);
-        System.out.println("" + actorID + 2);
-        System.out.println("" + extra1 + 2);
-        System.out.println("" + extra2 + 2);
+        if (in.hasNextInt()) {
+            int actionID = in.nextInt();
+            System.out.println(actionID);
+        
+        //if (in.hasNextInt()) {
+            int actorID = in.nextInt();
+            System.out.println("" + actorID);
+        //}
+        //if (in.hasNextDouble()) {
+            double extra1 = in.nextDouble();
+            System.out.println("" + extra1);
+        //}
+        //if (in.hasNextDouble()) {
+            double extra2 = in.nextDouble();
+            System.out.println("" + extra2);
+        }
     }
 
 /*
     public void sendPacket() {
         if (!inbox.isEmpty()) {
             char actionID = packet.getActionID();
-            out.print(Packet.START);
-            out.print(actionID);
+            out.println(Packet.START);
+            out.println(actionID);
 
             switch (actionID) {
                 case Packet.MOVE: {
-                    out.print(packet.getActorID());
+                    out.println(packet.getActorID());
                     for (Object val : packet.getExtras()) {
                         out.print(val);
                     }
@@ -77,14 +84,14 @@ public class CSMailroom {
                 }
                 case Packet.CREATE: {
                     for (Object val : packet.getExtras()) {
-                        out.print(val);
+                        out.println(val);
                     }
                     break;
                 }
                 case Packet.PORT: {
-                    out.print(packet.getActorID());
+                    out.println(packet.getActorID());
                     for (Object val : packet.getExtras()) {
-                        out.print(val);
+                        out.println(val);
                     }
                     break;
                 }
@@ -92,7 +99,7 @@ public class CSMailroom {
                     break;
                 }
             }
-            out.print(Packet.STOP);
+            out.println(Packet.STOP);
             out.flush();
         }
     }
