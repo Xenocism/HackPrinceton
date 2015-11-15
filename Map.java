@@ -1,12 +1,21 @@
+import java.util.LinkedList;
+
 public class Map {
+	
 	private Terrain terrMap[][]; // array of Terrain objects
-	// this part of the map
+	private RedBlackBST<Integer, Actor> dirtTree;
+    private LinkedList<Actor> dirt;
+    private int count;
 
 	public Map() {
-		terrMap = new Terrain[10][10]; // hard coded number of Terrain object in map
 
-		for (int i = 0; i < 10; i++) {
-			for (int j = 0; i < 10; i++) {
+		this.count = 0;
+		this.dirt = new LinkedList<Actor>();
+        this.dirtTree = new RedBlackBST<Integer, Actor>();
+		terrMap = new Terrain[100][100]; // hard coded number of Terrain object in map
+
+		for (int i = 0; i < 100; i++) {
+			for (int j = 0; i < 100; i++) {
 				terrMap = null; 
 			}
 		}
@@ -14,26 +23,33 @@ public class Map {
 
 	// asks if terrain chunk at x, y exists or is null
 	public boolean isTerrain(int x, int y) {
-		return terrMap[x][y] != null;
+		return terrMap[convert(x)][convert(y)] != null;
+	}
+
+	public int convert(int x) {
+		return (int) Math.ceil(x / 27.0);
 	}
 
 	public static destroy(int x, int y) {
-		terrMap[x][y] = null;
+		if (isTerrain(x, y)) {
+			int id = terrMap[convert(x)][convert(y)].getID;
+			dirtTree.delete(id);
+	        Iterable<Integer> keys = dirtTree.keys();
+	        dirt = new LinkedList<Terrain>();
+	        for (int i : keys) {
+	            dirt.add(dirtTree.get(i));
+	        }
+	        terrMap[x][y] = null;
+	        screen.setTerrain(actors);
+	    }
 	}
 
-	public void place(Terrain terr, int row, int col)
-	{
+	public void place(Terrain terr, int row, int col) {
 		terrMap[row][col] = terr;
+		dirtTree.put(new Integer(count), terr);
+		dirt.push(a)
+		count++;
 	}
-
-	// public Terrain[][] setMap(int xID, int yID, Terrain terrPatch) {
-	// 	terrMap[xID][yID] = terrPatch; 
-	// 	terrFull = true; 
-	// }
-
-	// public boolean(int x, int y) {
-
-	// }
 
 	public Terrain[][] getMap() {
 		return terrMap;
