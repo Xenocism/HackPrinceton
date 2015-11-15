@@ -184,7 +184,9 @@ public class CSEngine {
     // simple update call to all actors
     public void run() {
         if (!inbox.isEmpty()) {
+            //System.out.println("mail");
             // handle incoming mail
+            
             unpackage();
         }
     }
