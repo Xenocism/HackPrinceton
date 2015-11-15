@@ -3,7 +3,8 @@
 public class GameScreen {
 
     private CSEngine engine;
-    private Iterable<Actor> iterable;
+    private Iterable<Actor> iterable; // players
+    private Iterable<Terrain> map;
     private double mouseX;
     private double mouseY;
     private Player player;
@@ -20,6 +21,10 @@ public class GameScreen {
 
     public void setActors(Iterable<Actor> x) {
         this.iterable = x;
+    }
+
+    public void setTerrain(Iterable<Terrain> x) {
+        this.map = x;
     }
 
     public void init() {
@@ -46,6 +51,9 @@ public class GameScreen {
                 else {
                     StdDraw.picture((a.getX() + xshift), (a.getY() + yshift), a.getImgName());
                 }
+            }
+            for (Terrain t : map) {
+                StdDraw.picture((t.getX() + xshift), (t.getY() + yshift), a.getImgName());
             }
 
             StdDraw.rectangle(500.0 + xshift, 250.0 + yshift, 500.0, 250.0);
