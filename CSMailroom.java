@@ -41,23 +41,25 @@ public class CSMailroom {
     }
 
     public void sendPacket() {
-        out.print(Packet.MOVE);
-        out.print(3);
-        out.print(1.0);
-        out.print(2.0);
+        out.println(Packet.MOVE);
+        out.println(3);
+        out.println(1.0);
+        out.println(2.0);
         out.flush();
     }
 
     public void receivePacket() {
-        char actionID = in.next().charAt(0);
-        int actorID = in.nextInt();
-        double extra1 = in.nextDouble();
-        double extra2 = in.nextDouble();
+        if (in.hasNextInt()) {
+            int actionID = in.nextInt();
+            int actorID = in.nextInt();
+            double extra1 = in.nextDouble();
+            double extra2 = in.nextDouble();
 
-        System.out.println(actionID + 2);
-        System.out.println("" + actorID + 2);
-        System.out.println("" + extra1 + 2);
-        System.out.println("" + extra2 + 2);
+            System.out.println(actionID);
+            System.out.println("" + actorID);
+            System.out.println("" + extra1);
+            System.out.println("" + extra2);
+        }
     }
 
 /*
