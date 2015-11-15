@@ -66,9 +66,7 @@ public class SSEngine {
         outbox.add(toReturn);
     }
 
-    public void createpackage(int id) {
-
-        if (actorTree.get(id) == null) return;
+    public void createPackage(int id) {
 
         LinkedList<Double> extras = new LinkedList<Double>();
         extras.add((double) id);
@@ -81,6 +79,13 @@ public class SSEngine {
         Packet toReturn = new Packet(Packet.CREATE, id);
         toReturn.setExtras(extras);
         outbox.add(toReturn);
+        }
+
+        public void killPackage(int id) {
+
+        Packet toReturn = new Packet(Packet.KILL, id);
+        outbox.add(toReturn);
+
         }
 
      private void unpackage() {
@@ -126,13 +131,14 @@ public class SSEngine {
             a.setAY(ay);
 
             actorTree.put((idcount), a);
-            createpackage(idcount);
+            createPackage(idcount);
             idcount++;
         }
     }
 
     public void killActor(int id) {
         actorTree.delete(id);
+        killPackage(id);
     }
 
     //******************************** simple update call
