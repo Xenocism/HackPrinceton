@@ -90,6 +90,9 @@ public class CSEngine {
                 extras.add(a.getVX() + IMPULSE);
                 extras.add(a.getVY());
             } break;
+            case Packet.KILL: {
+                toSend = new Packet(Packet.KILL, aid);
+            }
             default:    break;
         }
         if (toSend != null) {
