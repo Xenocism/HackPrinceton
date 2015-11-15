@@ -4,6 +4,7 @@ import java.util.LinkedList;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.Iterator;
 
+// Client side game engine, takes care of physics, maps, literally the universe
 public class CSEngine {
     private static final int UP     = 0;
     private static final int LEFT   = 1;
