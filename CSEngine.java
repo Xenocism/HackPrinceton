@@ -21,9 +21,16 @@ public class CSEngine {
     private ConcurrentLinkedQueue<Packet> inbox;
     private ConcurrentLinkedQueue<Packet> outbox;
 
+    private ConcurrentLinkedQueue<Packet> ssInbox;
+
     private GameScreen screen;
 
     // Constructor, init and setters
+
+    //********** TEMP METHOD****************
+    public void setSSEngine(SSEngine engine) {
+        this.ssInbox = engine.getInbox();
+    }
 
     public CSEngine() {
         this.actors     = new LinkedList<Actor>();
@@ -91,8 +98,10 @@ public class CSEngine {
             } break;
             default:    break;
         }
-        if (toSend != null)
+        if (toSend != null) {
             outbox.add(toSend);
+            ssInbox.add(toSend);
+        }
     }
 
     // handle mouse click event given an actor
@@ -103,8 +112,10 @@ public class CSEngine {
         LinkedList<Double> extras = new LinkedList<Double>();
         extras.add(x);
         extras.add(y);
-        if (toSend != null)
+        if (toSend != null) {
             outbox.add(toSend);
+            ssInbox.add(toSend);
+        }
     }
 
     // makepackage for creating an actor
@@ -122,6 +133,7 @@ public class CSEngine {
         extras.add(ay);
         toSend.setExtras(extras);
         outbox.add(toSend);
+        ssInbox.add(toSend);
     }
 
     public ConcurrentLinkedQueue<Packet> getInbox() {
