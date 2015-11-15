@@ -1,6 +1,7 @@
 import java.net.*;
 import java.io.*;
 import java.util.*;
+import java.util.concurrent.ConcurrentLinkedQueue;
 
 public class SSMailroom {
     private ServerSocket server;
@@ -10,7 +11,7 @@ public class SSMailroom {
     private ConcurrentLinkedQueue<Packet> actions;
 
     public SSMailroom() {
-        actions = ConcurrentLinkedQueue<Packet>();
+        actions = new ConcurrentLinkedQueue<Packet>();
     }
 
     public void initSocket() {
@@ -51,8 +52,8 @@ public class SSMailroom {
     }
 
     public void receivePacket() {
-        int actionID;
-        int actorID; 
+        int actionID = 0;
+        int actorID = -1; 
         LinkedList<Double> extras;
         if (in.hasNextInt()) {
             actionID = in.nextInt();
@@ -77,16 +78,18 @@ public class SSMailroom {
                 break;
             }
             case Packet.KILL: {
+                extras = null;
                 break;
             }
-            case Packet.PORT {
+            case Packet.PORT: {
                 extras = new LinkedList<Double>();
                 for (int i = 0; i < 2; i++) {
                     extras.add(in.nextDouble());
                 }
                 break;
             }
-            default{
+            default: {
+                extras = null;
                 break;
             }
         }
@@ -94,14 +97,14 @@ public class SSMailroom {
             return;
         Packet send = new Packet(actionID, actorID);
         send.setExtras(extras);
-        outbox.add(send);
+        actions.add(send);
     }
 
     public void sendPacket() {
         int actionID;
         int actorID;
-        if (!inbox.isEmpty()) {
-            Packet packet = inbox.poll();
+        if (!actions.isEmpty()) {
+            Packet packet = actions.poll();
             LinkedList<Double> extras = packet.getExtras();
             
             actionID = packet.getActionID();
@@ -142,7 +145,7 @@ public class SSMailroom {
 
             out.println(Packet.START);
             out.println(actionID);
-            out.println(actorID)
+            out.println(actorID);
             for (double val : packet.getExtras()) {
                 out.println(val);
             }
