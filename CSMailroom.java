@@ -6,7 +6,7 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 public class CSMailroom {
     private Socket socket;
     private PrintWriter out;
-    private Scanner in;
+    private BufferedReader in;
     private CSEngine engine;
     private ConcurrentLinkedQueue<Packet> inbox;
     private ConcurrentLinkedQueue<Packet> outbox;
@@ -33,7 +33,7 @@ public class CSMailroom {
         try{
             out = new PrintWriter(socket.getOutputStream(), 
                 true);
-            in = new Scanner(socket.getInputStream());
+            in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
         } catch  (IOException e) {
             System.out.println("No I/O Client");
             System.exit(1);
@@ -115,38 +115,42 @@ public class CSMailroom {
             for (double val : packet.getExtras()) {
                 out.println(val);
             }
-            out.println(Packet.STOP);
-            out.flush();
+            //out.println(Packet.STOP);
+            //out.println();
             System.out.println("Sent");
         }
     }
 
 
-    public void receivePacket() {
-        if (in.hasNext()) {
+    public void receivePacket() throws IOException {
+        if (in.ready()) {
             System.out.println("receiving");
             int actionID;
             int actorID;
             LinkedList<Double> extras = new LinkedList<Double>();
-            if (in.next().equals(Packet.START)) {
-                actionID = in.nextInt();
+            String s = in.readLine();
+            System.out.println(s);
+            if (s.equals(Packet.START)) {
+                System.out.println("got a start");
+                actionID = Integer.parseInt(in.readLine());
+                System.out.println(actionID);
                 switch(actionID) {
                     case Packet.UPDATE: {
-                        actorID = in.nextInt();
+                        actorID = Integer.parseInt(in.readLine());
                         for (int i = 0; i < 6; i++) {
-                            extras.add(in.nextDouble());
+                            extras.add(Double.parseDouble(in.readLine()));
                         }
                         break;
                     }
                     case Packet.CREATE: {
-                        actorID = in.nextInt();
+                        actorID = Integer.parseInt(in.readLine());
                         for (int i = 0; i < 7; i++) {
-                            extras.add(in.nextDouble());
+                            extras.add(Double.parseDouble(in.readLine()));
                         }
                         break;
                     }
                     case Packet.KILL: {
-                        actorID = in.nextInt();
+                        actorID = Integer.parseInt(in.readLine());
                         break;
                     }
                     default: actorID = -1;
@@ -157,18 +161,17 @@ public class CSMailroom {
                     outbox.add(send);
                 }
             }
-            System.out.println("received");
         }
     }
     
-    public void transmit(String line) {
-        out.println(line);
-    }
+    // public void transmit(String line) {
+    //     out.println(line);
+    // }
 
-    public void receive() {
-        String line = in.next();
-        System.out.println("Text Recieved: " + line + " " + 2);
-    }
+    // public void receive() {
+    //     String line = in.readLine();
+    //     System.out.println("Text Recieved: " + line + " " + 2);
+    // }
 
 /*
     public static void main(String args[]) {
