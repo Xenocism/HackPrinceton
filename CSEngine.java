@@ -11,9 +11,6 @@ public class CSEngine {
     private static final int DOWN   = 2;
     private static final int RIGHT  = 3;
 
-    private static final int[] xBounds  = new int[]{0, 1000};
-    private static final int[] yBounds  = new int[]{0, 500};
-
     private static final String[] images = {"images\\fill.png"};
 
     private static final int IMPULSE = 5;

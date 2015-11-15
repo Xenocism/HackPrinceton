@@ -13,9 +13,6 @@ public class SSEngine {
 
     private static final String[] images = {"images\\fill.png"};
 
-    private static final int[] xBounds  = new int[]{0, 1000};
-    private static final int[] yBounds  = new int[]{0, 500};
-
     private static final int impulse = 5;
     private static final double FRICTION = 0.995;
 
