@@ -7,14 +7,14 @@ public class CSMailroom {
     private Socket socket;
     private PrintWriter out;
     private Scanner in;
-    //private CSEngine engine;
+    private CSEngine engine;
     private ConcurrentLinkedQueue<Packet> inbox;
     private ConcurrentLinkedQueue<Packet> outbox;
     
-    public CSMailroom() {
-        //this.engine = engine;
-        //inbox = engine.getOutbox();
-        //outbox = engine.getInbox();
+    public CSMailroom(CSEngine engine) {
+        this.engine = engine;
+        inbox = engine.getOutbox();
+        outbox = engine.getInbox();
     }
 
     public void initSocket(String host) {
