@@ -6,7 +6,7 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 public class SSMailroom {
     private ServerSocket server;
     private Socket client;
-    private Scanner in;
+    private BufferedReader in;
     private PrintWriter out;
     private SSEngine engine;
     private ConcurrentLinkedQueue<Packet> inbox;
@@ -34,9 +34,10 @@ public class SSMailroom {
         }
 
         try{
-            in = new Scanner(client.getInputStream());
-            out = new PrintWriter(client.getOutputStream(), 
-                true);
+           in = new BufferedReader(new InputStreamReader(
+                                      client.getInputStream()));
+           out = new PrintWriter(client.getOutputStream(), 
+                                 true);
         } catch (IOException e) {
             System.out.println("No I/O client");
             System.exit(-1);
@@ -44,74 +45,89 @@ public class SSMailroom {
         System.out.println("We have connected");
     }
 
-    public void receivePacket() {
-       System.out.println("Packet receive started");
-       if (in.hasNext()) {
-          System.out.println("Found beginning");
-          if (!in.next().equals(Packet.START)) {
-             System.out.println("No packet start");
+   private String read() throws IOException {
+      String line = in.readLine();
+//      System.out.println(line);
+      return line;
+   }
+
+    public void receivePacket() throws IOException{
+//       System.out.println("Packet receive started");
+       if (in.ready()) {
+//          System.out.println("Found beginning");
+          if (!read().equals(Packet.START)) {
+//             System.out.println("No packet start");
              return;
           }
-       }
-       System.out.println("Got past start");
-        int actionID = 0;
-        int actorID = -1; 
-        LinkedList<Double> extras;
-        if (in.hasNextInt()) {
-            actionID = in.nextInt();
-            System.out.println("Action ID " + actionID);
-        }
-        if (in.hasNextInt()) {
-            actorID = in.nextInt();
-        }
-        
-        System.out.println("Entering switch");
-        switch(actionID) {
-            case Packet.UPDATE: {
-                extras = new LinkedList<Double>();
-                for (int i = 0; i < 6; i++) {
-                    extras.add(in.nextDouble());
-                }
-                break;
-            }
-            case Packet.CREATE: {
-               System.out.println("Create packet");
-                extras = new LinkedList<Double>();
-                for (int i = 0; i < 7; i++) {
-                    extras.add(in.nextDouble());
-                }
-                break;
-            }
-            case Packet.KILL: {
-                extras = null;
-                break;
-            }
-            case Packet.PORT: {
+       
+//          System.out.println("***************************************Got past start");
+          int actionID = 0;
+          int actorID = -1; 
+          LinkedList<Double> extras;
+          //line = in.readLine();
+
+          String line = read();
+       
+
+          actionID = Integer.parseInt(line);
+//          System.out.println("                            Action ID " + actionID);
+       
+          line = read();
+          actorID = Integer.parseInt(line);
+         
+//          System.out.println("Entering switch");
+          switch(actionID) {
+             case Packet.MOVE: {
                 extras = new LinkedList<Double>();
                 for (int i = 0; i < 2; i++) {
-                    extras.add(in.nextDouble());
+                   extras.add(Double.parseDouble(read()));
                 }
                 break;
-            }
-            default: {
+             }
+             case Packet.CREATE: {
+//                System.out.println("Create packet");
+                extras = new LinkedList<Double>();
+                for (int i = 0; i < 7; i++) {
+                   extras.add(Double.parseDouble(read()));
+                }
+                break;
+             }
+             case Packet.KILL: {
                 extras = null;
                 break;
-            }
-        }
-        System.out.println("Switch exited");
-        if (!in.next().equals(Packet.STOP))
-            return;
-        Packet send = new Packet(actionID, actorID);
-        send.setExtras(extras);
-        outbox.add(send);
-        System.out.println("Receive finish");
+             }
+             case Packet.PORT: {
+                extras = new LinkedList<Double>();
+                for (int i = 0; i < 2; i++) {
+                   extras.add(Double.parseDouble(read()));
+                }
+                break;
+             }
+             default: {
+                extras = null;
+                break;
+             }
+          }
+//          System.out.println("Switch exited");
+       
+          if (!read().equals(Packet.STOP)) {
+//             System.out.println("Didn't see Stop");
+             return;
+          }
+       
+          Packet send = new Packet(actionID, actorID);
+          send.setExtras(extras);
+          outbox.add(send);
+       }
+//       System.out.println("                             Receive finish");
     }
 
     public void sendPacket() {
-       System.out.println("Send started");
+//       System.out.println("Send started");
         int actionID;
         int actorID;
         if (!inbox.isEmpty()) {
+//           System.out.println("              Actually sending");
             Packet packet = inbox.poll();
             LinkedList<Double> extras = packet.getExtras();
             
@@ -120,11 +136,11 @@ public class SSMailroom {
 
             //validate packet extras
             switch (actionID) {
-                case Packet.MOVE: {
+                case Packet.UPDATE: {
                     if (extras == null) {
                         throw new NullPointerException();
                     }
-                    if (extras.size() != 2 || actorID < 0)
+                    if (extras.size() != 6 || actorID < 0)
                         return;
                     break;
                 }
@@ -132,8 +148,9 @@ public class SSMailroom {
                     if (extras == null) {
                         throw new NullPointerException();
                     }
-                    if (extras.size() != 4)
+                    if (extras.size() != 7)
                         return;
+//                    System.out.println("Sending a create packet");
                     break;
                 }
                 case Packet.PORT: {
@@ -156,11 +173,12 @@ public class SSMailroom {
             out.println(actorID);
             for (double val : packet.getExtras()) {
                 out.println(val);
+//                System.out.println(val);
             }
             out.println(Packet.STOP);
-            out.flush();
-            System.out.println("Send finished");
+//            System.out.println("**************************Actual send finished");
         }
+//        System.out.println("Send finish");
     }
    
 }
