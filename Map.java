@@ -18,10 +18,10 @@ public class Map {
 		this.gravity = new LinkedList<Well>();
 		this.chunks = new Well[10];
         this.dirtTree = new RedBlackBST<Integer, Terrain>();
-		this.terrMap = new Terrain[100][100]; // hard coded number of Terrain object in map
+		this.terrMap = new Terrain[1000][1000]; // hard coded number of Terrain object in map
 
-		for (int i = 0; i < 100; i++) {
-			for (int j = 0; i < 100; i++) {
+		for (int i = 0; i < 1000; i++) {
+			for (int j = 0; i < 1000; i++) {
 				terrMap[i][j] = null; 
 			}
 		}
@@ -29,12 +29,23 @@ public class Map {
 			chunks[i] = new Well();
 		}
 		screen.setTerrain(getMap());
+
+		// int id = 10;
+		// for (int i = 0; i < 10000; i ++) {
+		// 	for (int j = 0; j < 2 * Math.PI; i += .0001) {
+		// 		int x = convert(i * Math.cos(j));
+		// 		int y = convert(i * Math.sin(j));
+		// 		place(id, x, y);
+		// 		id++;
+		// 	}
+		// }
+
 		int id = 0;
-		for (int i = 0; i < 5; i++) {
+		for (int i = 0; i < 100; i++) {
 			for (int j = 0; j < 5; j++) {
 				place(id, i, j);
+				chunks[0].add(returnt(i, j));
 				id++;
-				chunks[0].add(returnt(i, j));				
 			}
 		}
 	}
@@ -48,7 +59,7 @@ public class Map {
 		return (terrMap[row][col] != null);
 	}
 
-	public int convert(int x) {
+	public int convert(double x) {
 		return (int) Math.ceil(x / 27.0);
 	}
 
