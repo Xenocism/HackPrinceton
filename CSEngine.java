@@ -11,9 +11,6 @@ public class CSEngine {
     private static final int DOWN   = 2;
     private static final int RIGHT  = 3;
 
-    private static final int[] xBounds  = new int[]{0, 1000};
-    private static final int[] yBounds  = new int[]{0, 500};
-
     private static final String[] images = {"images\\fill.png"};
 
     private static final int IMPULSE = 5;
@@ -189,40 +186,6 @@ public class CSEngine {
             unpackage();
         }
     }
-
-    //********************************* Move actor calls
-
-    // // give Actor a an up impulse
-    // private void moveUp(Actor a) {
-    //     if (a == null) throw new java.lang.IllegalArgumentException("Null Actor to moveUp");
-    //     double currVY = a.getVY();
-    //     currVY += impulse;
-    //     a.setVY(currVY);
-    // }
-
-    // // give Actor a a down impulse
-    // private void moveDown(Actor a) {
-    //     if (a == null) throw new java.lang.IllegalArgumentException("Null Actor to moveDown");
-    //     double currVY = a.getVY();
-    //     currVY -= impulse;
-    //     a.setVY(currVY);
-    // }
-
-    // // give Actor a a left impulse
-    // private void moveLeft(Actor a) {
-    //     if (a == null) throw new java.lang.IllegalArgumentException("Null Actor to moveLeft");
-    //     double currVX = a.getVX();
-    //     currVX -= impulse;
-    //     a.setVX(currVX);
-    // }
-
-    // // give Actor a a right impulse
-    // private void moveRight(Actor a) {
-    //     if (a == null) throw new java.lang.IllegalArgumentException("Null Actor to moveRight");
-    //     double currVX = a.getVX();
-    //     currVX += impulse;
-    //     a.setVX(currVX);
-    // }
 
     //************************** Actor give/kill calls
 
