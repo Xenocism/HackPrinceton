@@ -24,8 +24,6 @@ public class SSEngine {
     private ConcurrentLinkedQueue<Packet> inbox;
     private ConcurrentLinkedQueue<Packet> outbox;
 
-    private ConcurrentLinkedQueue test;
-
     // Constructor, init and setters
 
     public SSEngine() {
@@ -41,10 +39,6 @@ public class SSEngine {
         if (inbox == null)      return false;
         if (outbox == null)     return false;
         return true;
-    }
-
-    public void setCSEngine(CSEngine e) {
-        this.test = e.getInbox();
     }
 
     //********************************* Return in and Outbox
@@ -73,7 +67,6 @@ public class SSEngine {
         Packet toReturn = new Packet(Packet.UPDATE, id);
         toReturn.setExtras(extras);
         outbox.add(toReturn);
-        test.add(toReturn);
     }
 
     public void createpackage(int id) {
@@ -81,7 +74,7 @@ public class SSEngine {
         if (actorTree.get(id) == null) return;
 
         LinkedList<Double> extras = new LinkedList<Double>();
-        extras.add((double)id);
+        extras.add((double) id);
         extras.add(actorTree.get(id).getX());
         extras.add(actorTree.get(id).getY());
         extras.add(actorTree.get(id).getVX());
@@ -91,7 +84,6 @@ public class SSEngine {
         Packet toReturn = new Packet(Packet.CREATE, id);
         toReturn.setExtras(extras);
         outbox.add(toReturn);
-        test.add(toReturn);
         }
 
      private void unpackage() {
@@ -101,12 +93,9 @@ public class SSEngine {
         Actor actor     = actorTree.get(actorId);
         Iterator extras = present.getExtras().iterator();
         switch(actionId) {
-            case Packet.MOVE: {
-                System.out.println(actionId);
-                System.out.println(actor.getVX() + " " + actor.getVY());   
+            case Packet.MOVE: {   
                 actor.setVX((Double) extras.next());
                 actor.setVY((Double) extras.next());
-                System.out.println(actor.getVX() + " " + actor.getVY());
             } break;
 
             case Packet.CREATE: {
@@ -138,6 +127,7 @@ public class SSEngine {
             a.setVY(vy);
             a.setAX(ax);
             a.setAY(ay);
+
             actorTree.put((idcount), a);
             createpackage(idcount);
             idcount++;
@@ -146,7 +136,6 @@ public class SSEngine {
 
     public void killActor(int id) {
         actorTree.delete(id);
-        Iterable<Integer> keys = actorTree.keys();
     }
 
     //******************************** simple update call
