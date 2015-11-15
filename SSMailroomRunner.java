@@ -13,7 +13,9 @@ public class SSMailroomRunner extends Thread {
         room.initSocket();
         String line;
         while (true) {
-            room.listenSocket();
+           room.receivePacket();
+           System.out.println("Going to send packet");
+           room.sendPacket();
         }
     }
 }
