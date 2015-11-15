@@ -23,6 +23,10 @@ public class GameScreen {
         this.iterable = x;
     }
 
+    public void setTerrain(Iterable<Terrain> x) {
+        this.map = x;
+    }
+
     public void init() {
         
         StdDraw.setCanvasSize(1000,500);
