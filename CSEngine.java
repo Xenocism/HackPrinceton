@@ -13,6 +13,8 @@ public class CSEngine {
     private static final int[] xBounds  = new int[]{0, 1000};
     private static final int[] yBounds  = new int[]{0, 500};
 
+    private static final String[] images = {"images\\fill.png"};
+
     private static final int IMPULSE = 5;
 
     private RedBlackBST<Integer, Actor> actorTree;
@@ -54,13 +56,16 @@ public class CSEngine {
         // ping server
         Packet create = new Packet(Packet.CREATE, -1);
         LinkedList<Double> extras = new LinkedList<Double>();
+        extras.add(0.0);
         extras.add(500.0);
         extras.add(200.0);
         extras.add(0.0);
         extras.add(0.0);
         extras.add(0.0);
         extras.add(0.0);
+        create.setExtras(extras);
         outbox.add(create);
+        ssInbox.add(create);
         return true;
     }
 
@@ -71,34 +76,32 @@ public class CSEngine {
         if (a == null) throw new java.lang.IllegalArgumentException("Null Actor to Event (move)");
         int aid = a.getID();
         Packet toSend = null;
+        LinkedList<Double> extras = new LinkedList<Double>();
         switch(eid) {
             case UP: {
                 toSend = new Packet(Packet.MOVE, aid);
-                LinkedList<Double> extras = new LinkedList<Double>();
                 extras.add(a.getVX());
                 extras.add(a.getVY() + IMPULSE);
             }   break;
             case LEFT: {
                 toSend = new Packet(Packet.MOVE, aid);
-                LinkedList<Double> extras = new LinkedList<Double>();
                 extras.add(a.getVX() - IMPULSE);
                 extras.add(a.getVY());
             } break;
             case DOWN: {
                 toSend = new Packet(Packet.MOVE, aid);
-                LinkedList<Double> extras = new LinkedList<Double>();
                 extras.add(a.getVX());
                 extras.add(a.getVY() - IMPULSE);
             } break;
             case RIGHT: {
                 toSend = new Packet(Packet.MOVE, aid);
-                LinkedList<Double> extras = new LinkedList<Double>();
                 extras.add(a.getVX() + IMPULSE);
                 extras.add(a.getVY());
             } break;
             default:    break;
         }
         if (toSend != null) {
+            toSend.setExtras(extras);
             outbox.add(toSend);
             ssInbox.add(toSend);
         }
@@ -112,7 +115,9 @@ public class CSEngine {
         LinkedList<Double> extras = new LinkedList<Double>();
         extras.add(x);
         extras.add(y);
+
         if (toSend != null) {
+            toSend.setExtras(extras);
             outbox.add(toSend);
             ssInbox.add(toSend);
         }
@@ -152,6 +157,8 @@ public class CSEngine {
         int actorId     = present.getActorID();
         Actor actor     = actorTree.get(actorId);
         Iterator extras = present.getExtras().iterator();
+        if (actionId != 5)
+            System.out.println("actionid: " + actionId);
         switch(actionId) {
             case Packet.UPDATE:    {
                 actor.setX((Double) extras.next());
@@ -164,14 +171,15 @@ public class CSEngine {
 
             case Packet.CREATE: {
                 Player toAdd = new Player(actorId);
-                int type = (int) extras.next();
+                int type = (int) (double) extras.next();
                 toAdd.setX((Double) extras.next());
                 toAdd.setY((Double)extras.next());
                 toAdd.setVX((Double)extras.next());
                 toAdd.setVY((Double)extras.next());
                 toAdd.setAX((Double)extras.next());
                 toAdd.setAY((Double)extras.next());
-                giveActor(actor, actorId);
+                toAdd.setImgName(images[type]);
+                giveActor(toAdd, actorId);
             } break;
             case Packet.KILL:  {
                 killActor(actorId);
@@ -233,9 +241,11 @@ public class CSEngine {
 
     public void giveActor(Actor a, int id) {
         if (a == null) throw new java.lang.IllegalArgumentException("Null Actor to giveActor");
+        System.out.println("Heyo");
         actorTree.put(new Integer(id), a);
         actors.push(a);
         screen.setActors(actors);
+        screen.setPlayer((Player) a);
     }
 
     public void killActor(int id) {

@@ -14,6 +14,10 @@ public class GameScreen {
         this.engine = e;
     }
 
+    public void setPlayer(Player p) {
+        this.player = p;
+    }
+
     public void setActors(Iterable<Actor> x) {
         this.iterable = x;
     }
@@ -30,35 +34,36 @@ public class GameScreen {
     public void run() {
 
         StdDraw.clear();
+        if (player != null) {
+            Double xshift = 500.0 - player.getX();
+            Double yshift = 200.0 - player.getY();
+            //System.out.println(player.getX() + "  " + player.getY());
 
-        Double xshift = 500.0 - player.getX();
-        Double yshift = 200.0 - player.getY();
-        //System.out.println(player.getX() + "  " + player.getY());
-
-        for (Actor a : iterable) {
-            if (a instanceof Player) {
-                StdDraw.picture(500, 200, a.getImgName());
-            }
-            else {
-                StdDraw.picture((a.getX() + xshift), (a.getY() + yshift), a.getImgName());
-            }
-        }
-
-        StdDraw.rectangle(500.0 + xshift, 250.0 + yshift, 500.0, 250.0);
-        
-        if (StdDraw.hasNextKeyTyped()) {
-            char next = StdDraw.nextKeyTyped();
-            switch (next) {
-                case 'w': engine.makePackage(player, 0); break;
-                case 'a': engine.makePackage(player, 1); break;
-                case 's': engine.makePackage(player, 2); break;
-                case 'd': engine.makePackage(player, 3); break;
+            for (Actor a : iterable) {
+                if (a instanceof Player) {
+                    StdDraw.picture(500, 200, a.getImgName());
+                }
+                else {
+                    StdDraw.picture((a.getX() + xshift), (a.getY() + yshift), a.getImgName());
                 }
             }
-        if (StdDraw.mousePressed()) {
-            mouseX = StdDraw.mouseX();
-            mouseY = StdDraw.mouseY();
-            engine.makePackage(player, 4, mouseX, mouseY);
+
+            StdDraw.rectangle(500.0 + xshift, 250.0 + yshift, 500.0, 250.0);
+            
+            if (StdDraw.hasNextKeyTyped()) {
+                char next = StdDraw.nextKeyTyped();
+                switch (next) {
+                    case 'w': engine.makePackage(player, 0); break;
+                    case 'a': engine.makePackage(player, 1); break;
+                    case 's': engine.makePackage(player, 2); break;
+                    case 'd': engine.makePackage(player, 3); break;
+                    }
+                }
+            if (StdDraw.mousePressed()) {
+                mouseX = StdDraw.mouseX();
+                mouseY = StdDraw.mouseY();
+                engine.makePackage(player, 4, mouseX, mouseY);
+            }
         }
         StdDraw.show(10);
     }
