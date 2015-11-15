@@ -51,6 +51,7 @@ public class CSEngine {
         Packet create = new Packet(Packet.CREATE, -1);
         LinkedList<Double> extras = new LinkedList<Double>();
         terrain = new Map(screen);
+        screen.setTerrain(terrain.getMap());
         extras.add(0.0);
         extras.add(500.0);
         extras.add(200.0);
