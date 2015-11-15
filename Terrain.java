@@ -1,7 +1,7 @@
 public class Terrain extends Actor {
 
-	public Terrain (double x, double y) {
+	public Terrain (int id, double x, double y, String im) {
 		// takes x and y value that signify the left, bottom corner of a Terrain block
-		super(x, y, "images\\dirt.jpg");
+        super(id, x, y, im);
 	}
 }
