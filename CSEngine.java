@@ -73,7 +73,6 @@ public class CSEngine {
 
     // handle general event given an actor and an id
     public void makePackage(Actor a, int eid) {
-        System.out.println(eid);
         if (a == null) throw new java.lang.IllegalArgumentException("Null Actor to Event (move)");
         int aid = a.getID();
         Packet toSend = null;

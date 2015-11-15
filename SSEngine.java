@@ -96,15 +96,17 @@ public class SSEngine {
 
      private void unpackage() {
         Packet present  = inbox.poll();
-        char actionId    = present.getActionID();
+        int actionId    = present.getActionID();
         int actorId     = present.getActorID();
         Actor actor     = actorTree.get(actorId);
         Iterator extras = present.getExtras().iterator();
         switch(actionId) {
             case Packet.MOVE: {
-                System.out.println(actionId);   
+                System.out.println(actionId);
+                System.out.println(actor.getVX() + " " + actor.getVY());   
                 actor.setVX((Double) extras.next());
                 actor.setVY((Double) extras.next());
+                System.out.println(actor.getVX() + " " + actor.getVY());
             } break;
 
             case Packet.CREATE: {
@@ -152,11 +154,11 @@ public class SSEngine {
     // simple update call to all actors
     public void run() {
         if (!inbox.isEmpty()) {
-            System.out.println("got mail ss");
             // handle incoming mail
             unpackage();
         }
         for (int i = 0; i < idcount; i++) {
+            actorTree.get(i).update();
             update(i);
         }
     }
