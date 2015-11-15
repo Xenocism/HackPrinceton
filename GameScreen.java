@@ -70,7 +70,7 @@ public class GameScreen {
             if (StdDraw.mousePressed()) {
                 mouseX = StdDraw.mouseX();
                 mouseY = StdDraw.mouseY();
-                ngine.makePackage(player, 4, (mouseX - xshift), (mouseY - yshift));
+                engine.makePackage(player, 4, (mouseX - xshift), (mouseY - yshift));
             }
         }
         StdDraw.show(10);
