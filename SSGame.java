@@ -3,10 +3,10 @@ public class SSGame {
 
         SSEngine engine = new SSEngine();
         SSMailroom mail = new SSMailroom(engine);
-        SSMailroomRunner run = new SSMailroomRunner();
+        SSMailroomRunner run = new SSMailroomRunner(mail);
 
         engine.init();
-        //run.start();
+        run.start();
 
         while (true) {
             engine.run();
