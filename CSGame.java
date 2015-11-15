@@ -5,14 +5,14 @@ public class CSGame {
         CSEngine engine = new CSEngine();
         CSMailroom mail = new CSMailroom(engine);
         GameScreen game = new GameScreen();
-        CSMailroomRunner run = new CSMailroomRunner(mail);
+        //CSMailroomRunner run = new CSMailroomRunner(mail);
 
         game.setEngine(engine);
         engine.setGameScreen(game);
 
         game.init();
         engine.init();
-        run.start();
+        //run.start();
 
         while (true) {
             engine.run();
