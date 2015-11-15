@@ -41,31 +41,31 @@ public class SSMailroom {
             System.out.println("No I/O client");
             System.exit(-1);
         }
-    }
-
-    public void listenSocket() {
-        String line;
-        while (true) {
-            if(in.hasNext()) {
-                if (in.next().equals(Packet.START)) {
-                    receivePacket();
-                    sendPacket();
-                }
-            }
-        }
+        System.out.println("We have connected");
     }
 
     public void receivePacket() {
+       System.out.println("Packet receive started");
+       if (in.hasNext()) {
+          System.out.println("Found beginning");
+          if (!in.next().equals(Packet.START)) {
+             System.out.println("No packet start");
+             return;
+          }
+       }
+       System.out.println("Got past start");
         int actionID = 0;
         int actorID = -1; 
         LinkedList<Double> extras;
         if (in.hasNextInt()) {
             actionID = in.nextInt();
+            System.out.println("Action ID " + actionID);
         }
         if (in.hasNextInt()) {
             actorID = in.nextInt();
         }
         
+        System.out.println("Entering switch");
         switch(actionID) {
             case Packet.UPDATE: {
                 extras = new LinkedList<Double>();
@@ -75,6 +75,7 @@ public class SSMailroom {
                 break;
             }
             case Packet.CREATE: {
+               System.out.println("Create packet");
                 extras = new LinkedList<Double>();
                 for (int i = 0; i < 7; i++) {
                     extras.add(in.nextDouble());
@@ -97,14 +98,17 @@ public class SSMailroom {
                 break;
             }
         }
+        System.out.println("Switch exited");
         if (!in.next().equals(Packet.STOP))
             return;
         Packet send = new Packet(actionID, actorID);
         send.setExtras(extras);
         outbox.add(send);
+        System.out.println("Receive finish");
     }
 
     public void sendPacket() {
+       System.out.println("Send started");
         int actionID;
         int actorID;
         if (!inbox.isEmpty()) {
@@ -155,6 +159,7 @@ public class SSMailroom {
             }
             out.println(Packet.STOP);
             out.flush();
+            System.out.println("Send finished");
         }
     }
    

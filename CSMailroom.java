@@ -68,6 +68,7 @@ public class CSMailroom {
         int actionID;
         int actorID;
         if (!inbox.isEmpty()) {
+            System.out.println("have in inbox");
             Packet packet = inbox.poll();
             LinkedList<Double> extras = packet.getExtras();
 
@@ -88,7 +89,7 @@ public class CSMailroom {
                     if (packet.getExtras() == null) {
                         throw new NullPointerException("Packets cannot have a null Extras (for now)");
                     }
-                    if (extras.size() != 4)
+                    if (extras.size() != 7)
                         return;
                     break;
                 }
@@ -116,12 +117,14 @@ public class CSMailroom {
             }
             out.println(Packet.STOP);
             out.flush();
+            System.out.println("Sent");
         }
     }
 
 
     public void receivePacket() {
         if (in.hasNext()) {
+            System.out.println("receiving");
             int actionID;
             int actorID;
             LinkedList<Double> extras = new LinkedList<Double>();
@@ -154,6 +157,7 @@ public class CSMailroom {
                     outbox.add(send);
                 }
             }
+            System.out.println("received");
         }
     }
     

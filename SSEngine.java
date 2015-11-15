@@ -68,18 +68,20 @@ public class SSEngine {
 
     public void createPackage(int id) {
 
-        LinkedList<Double> extras = new LinkedList<Double>();
-        extras.add((double) id);
-        extras.add(actorTree.get(id).getX());
-        extras.add(actorTree.get(id).getY());
-        extras.add(actorTree.get(id).getVX());
-        extras.add(actorTree.get(id).getVY());
-        extras.add(actorTree.get(id).getAX());
-        extras.add(actorTree.get(id).getAY());
-        Packet toReturn = new Packet(Packet.CREATE, id);
-        toReturn.setExtras(extras);
-        outbox.add(toReturn);
-        }
+       System.out.println("Creating package");
+       LinkedList<Double> extras = new LinkedList<Double>();
+       extras.add((double) id);
+       extras.add(actorTree.get(id).getX());
+       extras.add(actorTree.get(id).getY());
+       extras.add(actorTree.get(id).getVX());
+       extras.add(actorTree.get(id).getVY());
+       extras.add(actorTree.get(id).getAX());
+       extras.add(actorTree.get(id).getAY());
+       Packet toReturn = new Packet(Packet.CREATE, id);
+       toReturn.setExtras(extras);
+       outbox.add(toReturn);
+       System.out.println("Package in outbox");
+    }
 
         public void killPackage(int id) {
 
@@ -89,6 +91,7 @@ public class SSEngine {
         }
 
      private void unpackage() {
+        System.out.println("Unpackaging");
         Packet present  = inbox.poll();
         int actionId    = present.getActionID();
         int actorId     = present.getActorID();
@@ -104,6 +107,7 @@ public class SSEngine {
                 int index =  (int) ((double) extras.next());
                 giveActor(index, (Double) extras.next(), (Double) extras.next(), (Double) extras.next(), 
                     (Double) extras.next(), (Double) extras.next(), (Double) extras.next(), images[index]);
+                System.out.println("Handled create package");
             } break;
             case Packet.KILL: {
                 killActor(actorId);
@@ -123,6 +127,7 @@ public class SSEngine {
     //********************************* Create / Delete Actors
 
     public void giveActor(int type, double x, double y, double vx, double vy, double ax, double ay, String pic) {
+       System.out.println("Setting aspects");
         if (type == 0) {
             Player a = new Player((idcount), x, y, pic);
             a.setVX(vx);
@@ -134,6 +139,7 @@ public class SSEngine {
             createPackage(idcount);
             idcount++;
         }
+        System.out.println("Finished setting aspects");
     }
 
     public void killActor(int id) {
