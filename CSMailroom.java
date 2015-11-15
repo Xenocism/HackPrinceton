@@ -65,9 +65,11 @@ public class CSMailroom {
     // }
 
     public void sendPacket() {
+        System.out.println("sendpacket Called");
         int actionID;
         int actorID;
         if (!inbox.isEmpty()) {
+            System.out.println("have in inbox");
             Packet packet = inbox.poll();
             LinkedList<Double> extras = packet.getExtras();
 
@@ -116,12 +118,14 @@ public class CSMailroom {
             }
             out.println(Packet.STOP);
             out.flush();
+            System.out.println("Sent");
         }
     }
 
 
     public void receivePacket() {
         if (in.hasNext()) {
+            System.out.println("receiving");
             int actionID;
             int actorID;
             LinkedList<Double> extras = new LinkedList<Double>();
@@ -154,6 +158,7 @@ public class CSMailroom {
                     outbox.add(send);
                 }
             }
+            System.out.println("received");
         }
     }
     
