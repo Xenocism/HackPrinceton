@@ -68,7 +68,7 @@ public class CSMailroom {
         int actionID;
         int actorID;
         if (!inbox.isEmpty()) {
-            System.out.println("have in inbox");
+            //System.out.println("have to send");
             Packet packet = inbox.poll();
             LinkedList<Double> extras = packet.getExtras();
 
@@ -78,6 +78,7 @@ public class CSMailroom {
             //validate packet extras
             switch (actionID) {
                 case Packet.MOVE: {
+                    //System.out.println("move out");
                     if (packet.getExtras() == null) {
                         throw new NullPointerException("Packets cannot have a null Extras (for now)");
                     }
@@ -109,59 +110,70 @@ public class CSMailroom {
                 }
             }
 
-            //out.println(Packet.START);
+            out.println(Packet.START);
             out.println(actionID);
             out.println(actorID);
             for (double val : packet.getExtras()) {
                 out.println(val);
             }
             out.println(Packet.STOP);
-            // out.println();
-            System.out.println("Sent");
+            // out.flush();
+            //System.out.println("Sent");
         }
     }
 
 
     public void receivePacket() throws IOException {
         if (in.ready()) {
-            System.out.println("receiving");
+            //System.out.println("receiving");
             int actionID;
             int actorID;
             LinkedList<Double> extras = new LinkedList<Double>();
             String s = in.readLine();
             System.out.println(s);
             if (s.equals(Packet.START)) {
-                System.out.println("got a start");
-                actionID = Integer.parseInt(in.readLine());
+                //System.out.println("got a start");
+                actionID = Integer.parseInt(bfRead());
                 System.out.println(actionID);
                 switch(actionID) {
                     case Packet.UPDATE: {
-                        actorID = Integer.parseInt(in.readLine());
+                        actorID = Integer.parseInt(bfRead());
                         for (int i = 0; i < 6; i++) {
-                            extras.add(Double.parseDouble(in.readLine()));
+                            Double toAdd = Double.parseDouble(bfRead());
+                            extras.add(toAdd);
                         }
                         break;
                     }
                     case Packet.CREATE: {
-                        actorID = Integer.parseInt(in.readLine());
+                        actorID = Integer.parseInt(bfRead());
                         for (int i = 0; i < 7; i++) {
-                            extras.add(Double.parseDouble(in.readLine()));
+                            extras.add(Double.parseDouble(bfRead()));
                         }
                         break;
                     }
                     case Packet.KILL: {
-                        actorID = Integer.parseInt(in.readLine());
+                        actorID = Integer.parseInt(bfRead());
                         break;
                     }
                     default: actorID = -1;
                 }
+                String str = in.readLine();
+                if (s.equals(Packet.STOP))
+                    System.out.println("not a stop, it's a " + str);
                 if (actorID != -1) {
+                    //System.out.println("gave him stuff");
                     Packet send = new Packet(actionID, actorID);
                     send.setExtras(extras);
                     outbox.add(send);
                 }
             }
         }
+    }
+
+    private String bfRead() throws IOException {
+        String s = in.readLine();
+        //System.out.println(s);
+        return s;
     }
     
     // public void transmit(String line) {
