@@ -30,16 +30,6 @@ public class Map {
 		}
 		screen.setTerrain(getMap());
 
-		// int id = 10;
-		// for (int i = 0; i < 10000; i ++) {
-		// 	for (int j = 0; j < 2 * Math.PI; i += .0001) {
-		// 		int x = convert(i * Math.cos(j));
-		// 		int y = convert(i * Math.sin(j));
-		// 		place(id, x, y);
-		// 		id++;
-		// 	}
-		// }
-
 		int id = 0;
 		for (int i = 0; i < 100; i++) {
 			for (int j = 0; j < 5; j++) {
