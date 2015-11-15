@@ -2,17 +2,17 @@ import java.util.*;
 public class Packet {
     public static final String START = "start";
     public static final String STOP = "stop";
-    public static final char MOVE = 1;
-    public static final char CREATE = 2;
-    public static final char KILL = 3;
-    public static final char PORT = 4;
-    public static final char UPDATE = 5;
+    public static final int MOVE = 1;
+    public static final int CREATE = 2;
+    public static final int KILL = 3;
+    public static final int PORT = 4;
+    public static final int UPDATE = 5;
 
-    private char actionID;
+    private int actionID;
     private int actorID;
     private LinkedList<Double> extras;
 
-    public Packet(char actionID, int actorID) {
+    public Packet(int actionID, int actorID) {
         if (actionID < 0 || actionID > Character.MAX_VALUE) 
             throw new NullPointerException("Action ID isn't valid");
         this.actionID = actionID;
@@ -28,7 +28,7 @@ public class Packet {
         return extras;
     }
 
-    public char getActionID() {
+    public int getActionID() {
         return actionID;
     }
 
