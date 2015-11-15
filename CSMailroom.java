@@ -130,11 +130,11 @@ public class CSMailroom {
             int actorID;
             LinkedList<Double> extras = new LinkedList<Double>();
             String s = in.readLine();
-            System.out.println(s);
+            //System.out.println(s);
             if (s.equals(Packet.START)) {
                 //System.out.println("got a start");
                 actionID = Integer.parseInt(bfRead());
-                System.out.println(actionID);
+                //System.out.println(actionID);
                 switch(actionID) {
                     case Packet.UPDATE: {
                         actorID = Integer.parseInt(bfRead());
