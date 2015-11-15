@@ -11,7 +11,7 @@ public class CSEngine {
     private static final int DOWN   = 2;
     private static final int RIGHT  = 3;
 
-    private static final String[] images = {"images\\fill.png"};
+    private static final String[] images = {"images\\mdkp.png"};
 
     private static final int IMPULSE = 5;
 
